@@ -1,0 +1,50 @@
+.regQuestion {
+    max-width: 260px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 16px;
+    margin-bottom: 30px;
+    gap: 7px;
+}
+
+.regQuestion__question {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    color: #A0A0A0;
+    margin: 0;
+}
+
+.regQuestion__question-link {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    color: #FF6838;
+    margin: 0;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity .5s ease;
+}
+
+.regQuestion__question-link:hover {
+    opacity: 0.6;
+}
+
+@media screen and (min-width: 768px) {
+
+    .regQuestion {
+        max-width: 300px;
+        gap: 6px;
+    }
+
+    .regQuestion__question {
+        font-size: 14px;
+        line-height: 17px;
+    }
+
+    .regQuestion__question-link {
+        font-size: 14px;
+        line-height: 17px;
+    }
+}

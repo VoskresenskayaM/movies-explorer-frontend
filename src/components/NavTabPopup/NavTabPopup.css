@@ -1,0 +1,151 @@
+.navtabpopup {
+    display: flex;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    width: 100vw;
+    min-height: 780px;
+    z-index: 1;
+    background-color: #ffffff;
+    position: absolute;
+}
+
+.navtabpopup__list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 138px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.navtabpopup__opened {
+    visibility: visible;
+    opacity: 1;
+}
+
+.navtabpopup__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    max-width: 320px;
+}
+
+.navtabpopup__cross {
+    position: absolute;
+    top: 13.44px;
+    right: 13.44px;
+    transition: opacity .5s ease;
+    cursor: pointer;
+}
+
+.navtabpopup__cross:hover {
+    opacity: 0.6;
+}
+
+.navtabpopup__elem {
+    margin-top: 8px;
+    min-height: 36px;
+    border-bottom: #ffffff 2px solid;
+}
+
+.navtabpopup__elem-value {
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 22px;
+    color: #000000;
+    padding-bottom: 10px;
+}
+
+.navtabpopup__elem:hover {
+    border-bottom: #000000 2px solid;
+}
+
+.navtabpopup__accoutn {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px;
+    color: #000000;
+    padding-right: 5px;
+}
+
+.navtabpopup__accoutn-image {
+    width: 12px;
+    height: 12px;
+}
+
+.navtabpopup__accoutn-image-block {
+    width: 30px;
+    height: 30px;
+    background-color: #F9F9F9;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.navtabpopup__accoutn-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+}
+
+.navtabpopup__accoutn-block {
+    margin-top: 410px;
+}
+
+@media screen and (min-width: 768px) {
+    .navtabpopup {
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: flex-end;
+        flex-direction: row;
+        min-height: 1024px;
+    }
+
+    .navtabpopup__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        min-width: 520px;
+        background-color: #ffffff;
+        z-index: 3;
+    }
+
+    .navtabpopup__cross {
+        position: absolute;
+        top: 22.44px;
+        right: 22.44px;
+    }
+
+    .navtabpopup__list {
+        margin-top: 148px;
+    }
+
+    .navtabpopup__elem {
+        margin-top: 12px;
+    }
+
+    .navtabpopup__accoutn-block {
+        margin-top: 588px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .navtabpopup {
+        visibility: hidden;
+        min-height: 700px;
+    }
+
+    .navtabpopup__accoutn-block {
+        margin-top: 0px;
+    }
+}

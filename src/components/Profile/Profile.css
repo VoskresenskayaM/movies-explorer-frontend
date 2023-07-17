@@ -1,0 +1,141 @@
+.profile {
+    min-width: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    min-height: 620px;
+}
+
+.profile__title {
+    font-size: 24px;
+    font-weight: medium;
+    line-height: auto;
+    margin: 70px 0 0 0;
+}
+
+.profile__info-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    margin-top: 68px;
+}
+
+.profile__info-block-elems {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 260px;
+    padding: 16px 0;
+}
+
+.profile__info-block-elems-border {
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.profile__info-block-elem {
+    font-size: 11px;
+    font-weight: medium;
+    line-height: auto;
+    margin: 0;
+}
+
+.profile__link-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    margin: 296px 0 0 0;
+}
+
+.profile__edit {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: auto;
+    margin: 70px 0 0 0;
+    color: #000000;
+    text-decoration: none;
+    transition: opacity .5s ease;
+}
+
+.profile__edit:hover {
+    opacity: 0.6;
+}
+
+.profile__exit {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: auto;
+    color: #EE3465;
+    margin: 16px 0 0 0;
+    text-decoration: none;
+    transition: opacity .5s ease;
+}
+
+.profile__exit:hover {
+    opacity: 0.6;
+}
+
+@media screen and (min-width: 768px) {
+    .profile {
+        min-width: 410px;
+        min-height: 950px;
+    }
+
+    .profile__title {
+        margin: 236px 0 0 0;
+    }
+
+    .profile__info-block {
+        margin-top: 84px;
+    }
+
+    .profile__info-block-elems {
+        min-width: 410px;
+    }
+
+    .profile__link-block {
+        margin: 126px 0 0 0;
+    }
+
+    .profile__edit {
+        font-size: 13px;
+    }
+
+    .profile__exit {
+        font-size: 13px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .profile {
+        min-width: 410px;
+        min-height: 626px;
+    }
+
+    .profile__title {
+        margin: 74px 0 0 0;
+    }
+
+    .profile__info-block {
+        margin-top: 112px;
+    }
+
+    .profile__info-block-elems {
+        min-width: 410px;
+    }
+
+    .profile__link-block {
+        margin: 135px 0 0 0;
+    }
+
+    .profile__edit {
+        font-size: 13px;
+    }
+
+    .profile__exit {
+        font-size: 13px;
+    }
+}

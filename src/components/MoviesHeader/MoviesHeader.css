@@ -1,0 +1,20 @@
+.moviesheader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: 292px;
+    min-height: 74px;
+    align-items: center;
+}
+
+@media screen and (min-width: 768px) {
+    .moviesheader {
+        min-width: 708px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .moviesheader {
+        min-width: 1140px;
+    }
+}

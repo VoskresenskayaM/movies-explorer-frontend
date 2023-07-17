@@ -1,0 +1,18 @@
+.editprofile {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+@media screen and (min-width: 768px) {
+    .editprofile {
+        min-height: 1024px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .editprofile {
+        min-height: 700px;
+    }
+}
