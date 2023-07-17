@@ -5,7 +5,7 @@ function Input({ id, lable, type, name, autoComplete, placeholder, error, isVali
     const inputClassName = `input__input ${isValidInput ? '' : 'input__input-text-error'}`
     return (
         <div className='input'>
-            <lable className="input__lable" for={id}>{lable}</lable>
+            <label className="input__lable" htmlFor={id}>{lable}</label>
             <input className={inputClassName}
                 id={id}
                 type={type}

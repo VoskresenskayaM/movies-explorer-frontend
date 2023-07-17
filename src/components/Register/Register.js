@@ -47,7 +47,6 @@ function Register() {
                 buttonValue='Войти'
             />
         </div>
-
     )
 }
 export default Register;

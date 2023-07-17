@@ -4,7 +4,6 @@ import './MoviesCardList.css';
 
 function MoviesCardList({ isSavedList, isMoviesEmpty, mapForPage, hendlePopupOpen }) {
 
-
     return (
         <div className='moviesCardList'>
             <ul className='moviesCardList__list'>
@@ -19,8 +18,8 @@ function MoviesCardList({ isSavedList, isMoviesEmpty, mapForPage, hendlePopupOpe
                 )
                 )}
             </ul>
-            <botton className={isMoviesEmpty ? 'moviesCardList__botton  moviesCardList__botton-none' :
-                'moviesCardList__botton'}>Ещё</botton>
+            <button className={isMoviesEmpty ? 'moviesCardList__button  moviesCardList__button-none' :
+                'moviesCardList__button'}>Ещё</button>
         </div>
     )
 }

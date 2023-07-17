@@ -1,4 +1,3 @@
-import React, { Children } from 'react';
 import { useState } from 'react';
 import './RegForm.css';
 import SubmitButton from '../SubmitButton/SubmitButton';

@@ -2,7 +2,7 @@ import React from 'react';
 import MainSubtitle from '../MainSubtitle/MainSubtitle';
 import './AboutMe.css';
 import me from '../../images/me.jpg';
-import PortfolioLink from '../PortfolioLink/PortfolioLink'
+import Portfolio from '../Portfolio/Portfolio';
 
 function AboutMe() {
     return (
@@ -25,24 +25,8 @@ function AboutMe() {
                     <p className='aboutme__git'>Github</p>
                 </div>
             </div>
-            <div className='aboutme__portfolio'>
-                <h3 className='aboutme__portfolio-title'>Портфолио</h3>
-                <div className='aboutme__portfolio-container'>
-                    <div className='aboutme__portfolio-blok'>
-                        <PortfolioLink
-                            name='Статичный сайт'
-                            link='https://voskresenskayam.github.io/how-to-learn/' />
-                        <PortfolioLink
-                            name='Адаптивный сайт'
-                            link='https://voskresenskayam.github.io/russian-travel/' />
-                        <PortfolioLink
-                            name='Одностраничное приложение'
-                            link='https://vmm459.nomoredomains.rocks' />
-                    </div>
-
-                </div>
-            </div>
-        </div>
+            <Portfolio />
+        </div >
     )
 }
 export default AboutMe;
