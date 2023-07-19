@@ -6,7 +6,7 @@ import { HashLink as Link } from 'react-router-hash-link';
 
 function Promo() {
     return (
-        <div className='promo'>
+        <section className='promo'>
             <div className='promo__container'>
                 <img className='promo__earth' src={Earth} alt='earth' />
                 <div className='promo__title-container'>
@@ -15,7 +15,7 @@ function Promo() {
                     <Link to="#aboutProject-section" className='promo__button'>Узнать больше</Link>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }
 

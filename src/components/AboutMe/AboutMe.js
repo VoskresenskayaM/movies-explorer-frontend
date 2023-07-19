@@ -6,7 +6,7 @@ import Portfolio from '../Portfolio/Portfolio';
 
 function AboutMe() {
     return (
-        <div className='aboutme'>
+        <section className='aboutme'>
             < MainSubtitle
                 text='Студент' />
             <div className='aboutme__container'>
@@ -26,7 +26,7 @@ function AboutMe() {
                 </div>
             </div>
             <Portfolio />
-        </div >
+        </section >
     )
 }
 export default AboutMe;

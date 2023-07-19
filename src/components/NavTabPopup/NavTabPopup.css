@@ -7,7 +7,7 @@
     min-height: 780px;
     z-index: 1;
     background-color: #ffffff;
-    position: absolute;
+    position: fixed;
 }
 
 .navtabpopup__list {

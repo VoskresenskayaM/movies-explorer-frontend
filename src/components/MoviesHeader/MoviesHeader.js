@@ -8,30 +8,15 @@ function MoviesHeader({ hendlePopupOpen, windowWidth }) {
 
     if (windowWidth < 1280)
         return (
-            <div className="moviesheader">
+            <header className="moviesheader">
                 <Logo />
                 <Burger
                     hendlePopupOpen={hendlePopupOpen}
                 />
-            </div>)
-    return (<div className="moviesheader">
+            </header>)
+    return (<header className="moviesheader">
         <Logo />
         <NavTab />
-    </div>)
-
-
-
-
-
-    /*return (
-        <div className="moviesheader">
-                    <Logo />
-                    {windowWidth<1280 ?   
-                    
-                    <Burger
-                        hendlePopupOpen={hendlePopupOpen}
-                    /> : <NavTab/>}
-        </div>
-    )*/
+    </header>)
 }
 export default MoviesHeader;

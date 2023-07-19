@@ -3,9 +3,9 @@ import save from '../../images/icon.svg';
 
 function MoviesCardIcon() {
     return (
-        <div className='moviesCardIcon'>
+        <button className='moviesCardIcon'>
             <img src={save} alt='галочка' />
-        </div>
+        </button>
     )
 }
 

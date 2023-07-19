@@ -10,7 +10,7 @@ function NavTabPopup({ isPopupOpen, hendlePopupClose }) {
     return (
 
         <div className={navTabClass}>
-            <div className='navtabpopup__container' >
+            <nav className='navtabpopup__container' >
                 <div className='navtabpopup__cross'>
                     <img src={cross} alt='закрыть' onClick={hendlePopupClose} />
                 </div>
@@ -24,7 +24,7 @@ function NavTabPopup({ isPopupOpen, hendlePopupClose }) {
                 </ul>
                 <Account
                     hendlePopupClose={hendlePopupClose} />
-            </div >
+            </nav >
         </div >
     )
 }

@@ -16,6 +16,12 @@
     width: 100%;
 }
 
+@media screen and (min-width: 520px) {
+    .mainSubtitle {
+        min-width: 500px;
+    }
+}
+
 @media screen and (min-width: 768px) {
     .mainSubtitle {
         min-width: 668px;
@@ -28,6 +34,12 @@
         font-size: 22px;
         line-height: 27px;
         margin-bottom: 0px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .mainSubtitle {
+        min-width: 900px;
     }
 }
 

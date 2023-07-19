@@ -5,7 +5,7 @@ import './MoviesCardList.css';
 function MoviesCardList({ isSavedList, isMoviesEmpty, mapForPage, hendlePopupOpen }) {
 
     return (
-        <div className='moviesCardList'>
+        <section className='moviesCardList'>
             <ul className='moviesCardList__list'>
                 {mapForPage.map((el, index, _) => (
                     <li key={index}>
@@ -20,7 +20,7 @@ function MoviesCardList({ isSavedList, isMoviesEmpty, mapForPage, hendlePopupOpe
             </ul>
             <button className={isMoviesEmpty ? 'moviesCardList__button  moviesCardList__button-none' :
                 'moviesCardList__button'}>Ещё</button>
-        </div>
+        </section>
     )
 }
 export default MoviesCardList;

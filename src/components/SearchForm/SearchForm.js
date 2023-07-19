@@ -1,9 +1,9 @@
 import './SearchForm.css';
-import find from '../../images/find.png';
-import find_grey from '../../images/find_grey.png';
+import find from '../../images/find.svg';
+import find_grey from '../../images/find_grey.svg';
 function SearchForm() {
     return (
-        <div className='searchForm'>
+        <section className='searchForm'>
             <form className='searchForm__form'>
                 <div className='searchForm__block'>
                     <div className='searchForm__form-input-block'>
@@ -21,7 +21,7 @@ function SearchForm() {
                 </div>
             </form>
             <div className='searchForm__border-line'></div>
-        </div>
+        </section>
     )
 }
 

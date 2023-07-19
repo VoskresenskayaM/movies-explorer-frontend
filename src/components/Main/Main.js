@@ -8,13 +8,15 @@ import Footer from '../Footer/Footer';
 import './Main.css';
 function Main() {
     return (
-        <div className='main'>
-            <Promo />
-            <AboutProject />
-            <Techs />
-            <AboutMe />
+        <>
+            <main className='main'>
+                <Promo />
+                <AboutProject />
+                <Techs />
+                <AboutMe />
+            </main>
             <Footer />
-        </div>
+        </>
     )
 }
 

@@ -60,6 +60,13 @@
     margin: 42px 0 0 0;
 }
 
+@media screen and (min-width: 520px) {
+    .aboutme__container {
+
+        max-width: 500px;
+    }
+}
+
 @media screen and (min-width: 768px) {
     .aboutme {
         min-height: 994px;
@@ -103,6 +110,12 @@
 
     .aboutme__git {
         margin: 88px 0 0 0;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .aboutme__container {
+        min-width: 900px;
     }
 }
 

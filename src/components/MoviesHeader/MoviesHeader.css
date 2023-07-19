@@ -7,9 +7,21 @@
     align-items: center;
 }
 
+@media screen and (min-width: 520px) {
+    .moviesheader {
+        min-width: 500px;
+    }
+}
+
 @media screen and (min-width: 768px) {
     .moviesheader {
         min-width: 708px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .moviesheader {
+        min-width: 900px;
     }
 }
 

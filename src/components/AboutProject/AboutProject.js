@@ -4,7 +4,7 @@ import MainSubtitle from '../MainSubtitle/MainSubtitle'
 
 function AboutProject() {
     return (
-        <div className='aboutProject' id="aboutProject-section">
+        <section className='aboutProject' id="aboutProject-section">
             < MainSubtitle
                 text='О проекте' />
             <div className='aboutProject__description-tab'>
@@ -32,7 +32,7 @@ function AboutProject() {
                     <p className='aboutProject__deadline-item-work'>Front-end</p>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }
 export default AboutProject;

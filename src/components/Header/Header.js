@@ -11,7 +11,8 @@ function Header({ hendlePopupOpen, windowWidth }) {
     switch (location.pathname) {
 
         case '/':
-            return (<div className='header'>
+            return (
+            <header className='header'>
                 <div className='header__conainer'>
                     <Logo />
                     <div className='header__block'>
@@ -19,7 +20,7 @@ function Header({ hendlePopupOpen, windowWidth }) {
                         <Link to="/signin" className='header__log-button'>Войти</Link>
                     </div>
                 </div>
-            </div>)
+            </header>)
 
         case '/movies':
             return (
@@ -27,7 +28,6 @@ function Header({ hendlePopupOpen, windowWidth }) {
                     hendlePopupOpen={hendlePopupOpen}
                     windowWidth={windowWidth} />
             )
-
 
         case '/saved-movies':
             return (

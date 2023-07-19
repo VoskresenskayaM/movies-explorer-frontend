@@ -1,4 +1,4 @@
-.porfolioLink {
+.porfolioLink-block {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -6,6 +6,9 @@
     align-items: center;
     min-height: 67px;
     border-bottom: solid 1px #E6E6E6;
+    cursor: pointer;
+    transition: opacity .5s ease;
+    text-decoration: none;
 }
 
 .porfolioLink__name {
@@ -15,24 +18,26 @@
     margin-top: 0;
     margin-bottom: 0;
     letter-spacing: -0.04em;
+    color: #000000;
 }
 
 .porfolioLink__link {
     width: 18px;
     height: 28px;
-    cursor: pointer;
+    text-decoration: none;
 }
 
-.porfolioLink__img {
-    transition: opacity .5s ease;
-}
-
-.porfolioLink__img:hover {
+.porfolioLink-block:hover {
     opacity: 0.6;
 }
 
+.porfolioLink__img {
+    padding-bottom: 4px;
+    padding-right: 4px;
+}
+
 @media screen and (min-width: 768px) {
-    .porfolioLink {
+    .porfolioLink-block {
         min-height: 89px;
         min-width: 668px;
     }
@@ -48,20 +53,25 @@
     }
 
     .porfolioLink__img {
-        margin-top: 12px;
-        margin-left: 2px;
+        padding-top: 4px;
+        padding-right: 4px;
         width: 19px;
         height: 39px;
+        padding-bottom: 0;
     }
 }
 
 @media screen and (min-width: 1280px) {
-    .porfolioLink {
+    .porfolioLink-block {
         min-width: 1140px;
     }
 
     .porfolioLink__name {
         font-size: 30px;
         line-height: 50px;
+    }
+
+    .porfolioLink__img {
+        padding-right: 6px;
     }
 }

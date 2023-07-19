@@ -6,16 +6,17 @@ import Footer from '../Footer/Footer';
 import './Movies.css';
 
 function Movies({ isSavedList, isMoviesEmpty, mapForPage }) {
-
     return (
-        <div className='movies'>
+    <>
+        <main className='movies'>
             <SearchForm />
             <MoviesCardList
                 isSavedList={isSavedList}
                 isMoviesEmpty={isMoviesEmpty}
                 mapForPage={mapForPage} />
-            <Footer />
-        </div>
+        </main>
+        <Footer />
+    </>
     )
 }
 export default Movies;

@@ -60,6 +60,12 @@
     opacity: 0.6;
 }
 
+@media screen and (min-width: 520px) {
+    .header__conainer {
+        min-width: 500px;
+    }
+}
+
 @media screen and (min-width: 768px) {
     .header__conainer {
         min-width: 708px;
@@ -73,6 +79,12 @@
     .header__log-buttom {
         font-size: 12px;
         padding: 9px 20px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .header__conainer {
+        min-width: 900px;
     }
 }
 

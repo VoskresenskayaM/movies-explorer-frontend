@@ -75,6 +75,16 @@
     text-align: center;
 }
 
+@media screen and (min-width: 520px) {
+    .aboutProject__description-tab {
+        min-width: 500px;
+    }
+
+    .aboutProject__description {
+        min-width: 500px;
+    }
+}
+
 @media screen and (min-width: 768px) {
 
     .aboutProject {
@@ -121,6 +131,16 @@
         font-size: 14px;
         line-height: 17px;
         margin-top: 12px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+
+    .aboutProject__description-tab {
+        min-width: 900px;
+    }
+    .aboutProject__description {
+        min-width: 400px;
     }
 }
 

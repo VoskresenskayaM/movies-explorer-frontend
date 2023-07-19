@@ -4,7 +4,7 @@ import MainSubtitle from '../MainSubtitle/MainSubtitle';
 
 function Techs() {
     return (
-        <div className='techs'>
+        <section className='techs'>
             < MainSubtitle
                 text='Технологии' />
             <h3 className='techs__title'>7 технологий</h3>
@@ -32,7 +32,7 @@ function Techs() {
                     <p className='tech__technologie-value'>mongoDB</p>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }
 export default Techs;
