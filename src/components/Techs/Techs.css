@@ -1,0 +1,119 @@
+.techs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F5F5F5;
+    min-height: 651px;
+}
+
+.techs__title {
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: -0.04em;
+    margin: 60px 0 0 0;
+}
+
+.techs__about {
+    margin: 24px 0 0 0;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 16px;
+    max-width: 292px;
+    text-align: center;
+    letter-spacing: -0.04em;
+}
+
+.tech__technologies {
+    min-width: 178;
+    display: grid;
+    grid-template-columns: repeat(2, 84px);
+    grid-template-rows: repeat(2, 57px);
+    margin-top: 50px;
+    row-gap: 10px;
+    column-gap: 10px;
+}
+
+.tech__technologie {
+    width: 84px;
+    height: 57px;
+    background-color: #E8E8E8;
+    border-radius: 10px;
+}
+
+.tech__technologie-value {
+    margin-top: 20px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    text-align: center;
+    letter-spacing: -0.04em;
+}
+
+.tech__technologie-value-upercase {
+    text-transform: uppercase;
+}
+
+@media screen and (min-width: 768px) {
+    .techs {
+        min-height: 567px;
+    }
+
+    .tech__technologies {
+        min-width: 480px;
+        display: grid;
+        grid-template-columns: repeat(7, 84px);
+        margin-top: 83px;
+    }
+
+    .techs__title {
+        font-size: 50px;
+        line-height: 58px;
+        margin: 80px 0 0 0;
+    }
+
+    .techs__about {
+        margin: 22px 0 0 0;
+        font-size: 12px;
+        line-height: 18px;
+        max-width: 460px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .techs {
+        min-height: 625px;
+    }
+
+    .tech__technologies {
+        min-width: 690px;
+        display: grid;
+        grid-template-columns: repeat(7, 90px);
+        margin-top: 100px;
+    }
+
+    .techs__title {
+        font-size: 50px;
+        line-height: 58px;
+        margin: 90px 0 0 0;
+    }
+
+    .techs__about {
+        margin: 26px 0 0 0;
+        font-size: 14px;
+        line-height: 20px;
+        max-width: 460px;
+        letter-spacing: -0.04em;
+    }
+
+    .tech__technologie {
+        width: 90px;
+        height: 60px;
+    }
+
+    .tech__technologie-value {
+        margin-top: 21px;
+        font-size: 14px;
+        line-height: 17px;
+    }
+}

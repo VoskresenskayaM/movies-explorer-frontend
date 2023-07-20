@@ -1,0 +1,45 @@
+.portfolio-title {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #A0A0A0;
+    margin-top: 68px;
+    margin-bottom: 0;
+}
+
+.portfolio-blok {
+    margin-top: 20px;
+}
+
+@media screen and (min-width: 520px) {
+    .portfolio-blok {
+        min-width: 500px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+
+    .portfolio-title {
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 20px;
+        margin-top: 91px;
+    }
+
+    .portfolio-blok {
+        margin-top: 30px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .portfolio-blok {
+        min-width: 900px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+
+    .portfolio-title {
+        margin-top: 100px;
+    }
+}

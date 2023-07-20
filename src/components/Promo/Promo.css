@@ -1,0 +1,133 @@
+.promo {
+    background-color: #465DFF;
+    width: 100%;
+    margin-top: -1px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.promo__container {
+    display: flex;
+    flex-direction: column;
+    background-color: #465DFF;
+    min-height: 636px;
+    align-items: center;
+}
+
+.promo__earth {
+    height: 210px;
+    width: 206px;
+    margin-top: 66px;
+}
+
+.promo__title {
+    text-align: center;
+    color: #ffffff;
+    max-width: 320px;
+    font-size: 30px;
+    line-height: 38px;
+    font-weight: 400;
+    margin-top: 44px;
+    margin-bottom: 0px;
+    letter-spacing: -0.04em;
+}
+
+.promo__title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.promo__subtitle {
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 400;
+    margin-top: 24px;
+    margin-bottom: 0px;
+    text-align: center;
+    max-width: 260px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.promo__button {
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    border: #ffffff solid 1px;
+    border-radius: 3px;
+    margin-top: 80px;
+    padding: 9px 20px;
+    text-decoration: none;
+    transition: opacity .5s ease;
+}
+
+.promo__button:hover {
+    opacity: 0.6;
+}
+
+@media screen and (min-width: 768px) {
+    .promo__container {
+        min-height: 850px;
+    }
+
+    .promo__earth {
+        height: 304px;
+        width: 310px;
+        margin-top: 140px;
+    }
+
+    .promo__title {
+        max-width: 680px;
+        font-size: 40px;
+        line-height: 50px;
+        font-weight: 400;
+        margin-top: 50px;
+        letter-spacing: normal;
+    }
+
+    .promo__subtitle {
+        margin-top: 22px;
+    }
+
+    .promo__button {
+        margin-top: 90px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .promo__container {
+        min-height: 574px;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: flex-start;
+        min-width: 1140px;
+    }
+
+    .promo__earth {
+        margin-top: 75px;
+    }
+
+    .promo__title-container {
+        align-items: flex-start;
+        margin-top: 26px;
+    }
+
+    .promo__title {
+        text-align: start;
+        font-size: 50px;
+        line-height: 58px;
+    }
+
+    .promo__subtitle {
+        text-align: start;
+        max-width: 310px;
+        margin-top: 35px;
+    }
+
+    .promo__button {
+        margin-top: 148px;
+    }
+}

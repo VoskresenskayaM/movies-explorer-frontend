@@ -1,0 +1,32 @@
+.navtab__container {
+    display: flex;
+    flex-direction: row;
+    min-width: 676px;
+    justify-content: space-between;
+    max-height: 74px;
+}
+
+.navtab__list {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.navtab__elem-value {
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #000000;
+    transition: opacity .5s ease;
+}
+
+.navtab__elem-value:hover {
+    font-weight: medium;
+    opacity: 0.6;
+}

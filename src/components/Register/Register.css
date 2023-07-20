@@ -1,0 +1,19 @@
+.regiser {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+@media screen and (min-width: 768px) {
+    .regiser {
+        min-height: 1024px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .regiser {
+        min-height: 700px;
+    }
+}

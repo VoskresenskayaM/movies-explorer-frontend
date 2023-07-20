@@ -1,0 +1,24 @@
+.moviesCardSave {
+    width: 72px;
+    height: 21px;
+    border-radius: 10.5px;
+    background-color: #F9F9F9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity .5s ease;
+    border: none;
+}
+
+.moviesCardSave:hover {
+    opacity: 0.6;
+}
+
+.moviesCardSave__value {
+    margin: 0 auto;
+    font-size: 10px;
+    line-height: 9px;
+    font-weight: 400;
+}
