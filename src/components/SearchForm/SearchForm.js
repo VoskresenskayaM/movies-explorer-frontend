@@ -7,9 +7,9 @@ function SearchForm() {
             <form className='searchForm__form'>
                 <div className='searchForm__block'>
                     <div className='searchForm__form-input-block'>
-                        <input className='searchForm__form-input' type='text' name='filmName' placeholder="Фильм" min='1' max='300' required autoComplete="off"></input>
-                        <img className='searchForm__form-input-find' src={find_grey} alt='найти' />
-                        <button className='searchForm__form-button' type="submit"><img src={find} alt='лупа' /></button>
+                        <input className='searchForm__form-input' type='text' name='filmName' placeholder="Фильм" min='1' max='300' required autoComplete="off"/>
+                        <img className='searchForm__form-input-find' src={find_grey} alt='найти'/>
+                        <button className='searchForm__form-button' type="submit"><img src={find} alt='лупа'/></button>
                     </div>
                     <div className='searchForm__shortFilm-block'>
                         <label htmlFor='toddle' className='searchForm__lable'>

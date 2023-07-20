@@ -17,7 +17,6 @@
                             name='Одностраничное приложение'
                             link='https://vmm459.nomoredomains.rocks' />
                     </div>
-
                 </div>
         </div>
     )
