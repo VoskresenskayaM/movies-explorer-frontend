@@ -4,7 +4,7 @@ import './DeleteMoviesPopup.css';
 import cross from '../../images/cross.svg';
 
 
-function DeleteMoviesPopup({ isPopupOpen, hendlePopupClose, heandleDeleteMovies }) {
+function DeleteMoviesPopup({ isPopupOpen, hendlePopupClose, hendleDeleteMovies }) {
 
     const deleteMoviesPopupClass = `deletemoviespopup ${isPopupOpen ? 'deletemoviespopup__opened' : ''}`
     return (
@@ -15,7 +15,7 @@ function DeleteMoviesPopup({ isPopupOpen, hendlePopupClose, heandleDeleteMovies 
                     <img src={cross} alt='закрыть' onClick={hendlePopupClose} />
                 </div>
                 <p className='deletemoviespopup__question'>Вы действительно хотите удалить фильм?</p>
-                <Link to='/saved-movies' className='deletemoviespopup__link'><button className='deletemoviespopup__button' onClick={heandleDeleteMovies}>Удалить</button></Link>
+                <Link to='/saved-movies' className='deletemoviespopup__link'><button className='deletemoviespopup__button' onClick={hendleDeleteMovies}>Удалить</button></Link>
             </div >
         </div >
     )

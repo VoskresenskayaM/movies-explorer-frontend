@@ -1,10 +1,10 @@
-.deletemoviespopup {
+.successregpopup {
     display: flex;
     justify-content: center;
     visibility: hidden;
     opacity: 0;
     width: 100vw;
-    height: 100vh;
+    min-height: 780px;
     z-index: 1;
     position: fixed;
     background-color: rgba(0, 0, 0, 0.7);
@@ -13,12 +13,12 @@
     align-items: center;
 }
 
-.deletemoviespopup__opened {
+.successregpopup__opened {
     visibility: visible;
     opacity: 1;
 }
 
-.deletemoviespopup__container {
+.successregpopup__container {
     background-color: #ffffff;
     border-radius: 6px;
     min-width: 300px;
@@ -30,7 +30,7 @@
     align-items: center;
 }
 
-.deletemoviespopup__cross {
+.successregpopup__cross {
     position: absolute;
     top: 13.44px;
     right: 13.44px;
@@ -38,38 +38,19 @@
     transition: opacity .5s ease;
 }
 
-.deletemoviespopup__cross:hover {
+.successregpopup__cross:hover {
     opacity: 0.6;
 }
 
-.deletemoviespopup__button {
-    min-width: 260px;
-    min-height: 45px;
-    background-color: #FF6838;
-    color: #FFFFFF;
-    border-radius: 3px;
-    border: none;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 15px;
-    margin-top: 50px;
-    transition: opacity .5s ease;
+
+.successregpopup__image {
+    min-width: 40px;
+    min-height: 40px;
+    margin-top: 40px;
 }
 
-.deletemoviespopup__button:hover {
-    opacity: 0.6;
-}
 
-.deletemoviespopup__link {
-    text-decoration: none;
-}
-
-.deletemoviespopup__question {
+.successregpopup__message {
     font-size: 16px;
     font-weight: medium;
     line-height: 28px;
@@ -79,7 +60,7 @@
 }
 
 @media screen and (min-width: 768px) {
-    .deletemoviespopup {
+    .successregpopup {
         min-height: 650px;
     }
 

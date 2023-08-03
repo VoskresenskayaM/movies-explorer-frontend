@@ -41,6 +41,8 @@
     line-height: 12px;
     opacity: 0;
     margin: 6px 0 0 0;
+    max-width: 262px;
+    min-height: 12px;
 }
 
 .input__error-active {
@@ -50,6 +52,10 @@
 @media screen and (min-width: 768px) {
     .input {
         min-width: 396px;
+    }
+
+    .input__error {
+        max-width: 396px;  
     }
 
     .input__input {

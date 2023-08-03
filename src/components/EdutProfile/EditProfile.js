@@ -1,8 +1,34 @@
+import React from 'react';
+import { useState } from 'react';
 import './EditProfile.css';
 import RegForm from '../RegForm/RegForm';
 import Input from '../Input/Input';
+import { CurrentUserContext } from '../../context/currentUserContext';
+import { useFormValidate } from '../../hooks/useFormValidate'
 
-function EditProfile({ user }) {
+function EditProfile({ editUser }) {
+
+    /*const user = React.useContext(CurrentUserContext);*/
+    const formFields = ['name', 'email']
+    const { isValidInputs, errors, formValue, handleChange, isFormValid } = useFormValidate(...formFields)
+    /*const [formValue, setFormValue] = useState({
+        name: '',
+        email: ''
+    })
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormValue({
+            ...formValue,
+            [name]: value
+        });
+    }*/
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        editUser({item: formValue})
+    }
 
     return (
         <div className='editprofile'>
@@ -14,33 +40,28 @@ function EditProfile({ user }) {
                             lable='Имя'
                             type='text'
                             name='name'
-                            value={user.name}
                             autoComplete='on'
-                            error='какая-то ошибка валидации'
-                            isValidInput={true}
+                            error={errors.nameError||''}
+                            isValidInput={isValidInputs.nameIsValid||''}
+                            value={formValue.name||''}
+                            onChange={handleChange}
                         />
                         <Input
                             id='emailId'
                             lable='Email'
                             type='email'
                             name='email'
-                            value={user.email}
                             autoComplete='on'
-                            error='какая-то ошибка валидации'
-                            isValidInput={true}
-                        />
-                        <Input
-                            id='passwordId'
-                            lable='Новый пароль'
-                            type='password'
-                            name='password'
-                            autoComplete='on'
-                            error='какая-то ошибка валидации'
-                            isValidInput={true}
+                            error={errors.emailError||''}
+                            isValidInput={isValidInputs.emailIsValid||''}
+                            value={formValue.email||''}
+                            onChange={handleChange}
                         />
                     </>
                 }
-                buttonValue='Редактировать' />
+                handleSubmit={handleSubmit}
+                buttonValue='Редактировать'
+                isFormValid={isFormValid} />
         </div>
     )
 }

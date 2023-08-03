@@ -1,9 +1,17 @@
 import './Profile.css';
-import React from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
+import { CurrentUserContext } from '../../context/currentUserContext';
 
+function Profile({ navigateForPage }) {
+    
+    const user = useContext(CurrentUserContext);
+  
+    function signOut(){
+      localStorage.removeItem('token');
+      navigateForPage('/signin');
+    }
 
-function Profile({ user }) {
     return (
         <main>
             <section className='profile'>
@@ -20,7 +28,7 @@ function Profile({ user }) {
                 </div>
                 <div className='profile__link-block'>
                     <Link to="/editprofile" className='profile__edit'>Редактировать</Link >
-                    <Link to="/" className='profile__exit'>Выйти из аккаунта</Link >
+                    <Link to="/" className='profile__exit' onClick={signOut}>Выйти из аккаунта</Link >
                 </div>
             </section>
         </main>

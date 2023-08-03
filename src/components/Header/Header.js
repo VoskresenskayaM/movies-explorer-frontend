@@ -4,8 +4,10 @@ import MoviesHeader from '../MoviesHeader/MoviesHeader';
 import { Link } from 'react-router-dom';
 import './Header.css';
 import Logo from '../Logo/Logo';
+import { useEffect, useState } from "react";
 
-function Header({ hendlePopupOpen, windowWidth }) {
+function Header({ hendlePopupOpen/*, windowWidth, hendleSavedMovies, hendlNotSavedMovies*/}) {
+    
     let location = useLocation();
 
     switch (location.pathname) {
@@ -26,14 +28,18 @@ function Header({ hendlePopupOpen, windowWidth }) {
             return (
                 <MoviesHeader
                     hendlePopupOpen={hendlePopupOpen}
-                    windowWidth={windowWidth} />
+                
+                    /*hendleSavedMovies={hendleSavedMovies}
+                    hendlNotSavedMovies={hendlNotSavedMovies}*//>
             )
 
         case '/saved-movies':
             return (
                 <MoviesHeader
                     hendlePopupOpen={hendlePopupOpen}
-                    windowWidth={windowWidth} />
+                   /* windowWidth={windowWidth}
+                    hendleSavedMovies={hendleSavedMovies}
+                    hendlNotSavedMovies={hendlNotSavedMovies}*//>
             )
 
         case '/signin':
@@ -56,7 +62,9 @@ function Header({ hendlePopupOpen, windowWidth }) {
             return (
                 <MoviesHeader
                     hendlePopupOpen={hendlePopupOpen}
-                    windowWidth={windowWidth} />
+                     /*windowWidth={windowWidth}
+                    hendleSavedMovies={hendleSavedMovies}
+                    hendlNotSavedMovies={hendlNotSavedMovies}*/ />
             )
 
         default:

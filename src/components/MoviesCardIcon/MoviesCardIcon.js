@@ -1,10 +1,10 @@
 import './MoviesCardIcon.css';
 import save from '../../images/icon.svg';
 
-function MoviesCardIcon() {
+function MoviesCardIcon({ hendleDeleteSavedMovies }) {
     return (
-        <button className='moviesCardIcon'>
-            <img src={save} alt='галочка' />
+        <button className='moviesCardIcon' onClick={hendleDeleteSavedMovies}>
+            <img src={save} alt='галочка'  />
         </button>
     )
 }

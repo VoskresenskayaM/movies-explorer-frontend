@@ -5,7 +5,7 @@ function RegQuestion({ question, link, buttonValue }) {
     return (
         <div className='regQuestion'>
             <p className='regQuestion__question'>{question}</p>
-            <Link to={link} className='regQuestion__question-link'>{buttonValue}</Link>
+            <Link to={link} className='regQuestion__question-link' /*regOut*/>{buttonValue}</Link>
         </div>
     )
 }
