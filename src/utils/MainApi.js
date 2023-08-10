@@ -1,6 +1,5 @@
-/*import { SERVER_MAIN_URL } from "./Constants"; */
+import { SERVER_MAIN_URL } from "./Constants";
 import { SERVER_MOVIES_URL } from "./Constants";
-const SERVER_MAIN_URL= 'http://localhost:3001';
 
 class MainApi {
     constructor(bathPath, token) {
@@ -57,7 +56,6 @@ class MainApi {
     }
 
     saveMovies({ item }) {
-        //обраюотать если русское название на английском
         return this._request(`${this._basePath}/movies`, {
             method: "POST",
             headers: this._getHeaders(),

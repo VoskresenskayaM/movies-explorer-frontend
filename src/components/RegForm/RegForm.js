@@ -1,20 +1,22 @@
-import { useState } from 'react';
 import './RegForm.css';
 import SubmitButton from '../SubmitButton/SubmitButton';
+import ErrorMessageFromForm from '../ErrorMessageFromForm/ErrorMessageFromForm';
 
+function RegForm({ buttonValue, children, hendlePopupOpen, handleSubmit, isFormValid, errorMessage }) {
 
-function RegForm({ buttonValue, children, hendlePopupOpen, handleSubmit, isFormValid }) {
-
-    /*const [isFormValid, setIsFormVAlid] = useState(false)*/
+    const isFormValidButton = errorMessage === '' ? isFormValid : false
 
     return (
-        <form onSubmit={handleSubmit} className='regForm'>
+        <form onSubmit={handleSubmit} className='regForm' noValidate>
             <fieldset className='regForm__block'>
                 {children}
             </fieldset>
+            <ErrorMessageFromForm
+                errorMessage={errorMessage}
+            />
             <SubmitButton
                 buttonValue={buttonValue}
-                isFormValid={isFormValid}
+                isFormValid={isFormValidButton}
                 hendlePopupOpen={hendlePopupOpen}
                 handleSubmit={handleSubmit}
             />

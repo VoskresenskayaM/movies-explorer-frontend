@@ -4,12 +4,12 @@
     visibility: hidden;
     opacity: 0;
     width: 100vw;
+    height: 100vh;
     min-height: 780px;
     z-index: 1;
     position: fixed;
     background-color: rgba(0, 0, 0, 0.7);
     flex-direction: row;
-    min-height: 706px;
     align-items: center;
 }
 
@@ -56,11 +56,4 @@
     margin: 100px 0 0 0;
     max-width: 230px;
     text-align: center;
-}
-
-@media screen and (min-width: 768px) {
-    .erroregpopup {
-        min-height: 650px;
-    }
-
 }

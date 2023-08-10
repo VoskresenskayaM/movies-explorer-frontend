@@ -1,20 +1,13 @@
 import Logo from '../Logo/Logo';
 import Burger from '../Burger/Burger';
 import './MoviesHeader.css';
-import React, { useEffect, useState } from 'react';
 import NavTab from '../NavTab/NavTab';
+import { useGetWindowWidth } from '../../hooks/useGetWindowWidth';
 
+function MoviesHeader({ hendlePopupOpen }) {
 
-function MoviesHeader({ hendlePopupOpen/*, windowWidth, hendleSavedMovies, hendlNotSavedMovies*/}) {
-   const [windowWidthHeader, setWindowWidthHeader] = useState(window.innerWidth);
-  /* const [isPageLoading, setIsPageLoading] = useState(false);*/
-
-    useEffect(()=>{
-        window.onresize = () => { setWindowWidthHeader(window.innerWidth) };
-        /*setIsPageLoading(!isPageLoading)*/
-        return () => { window.onresize = false; }
-    },[windowWidthHeader/*,isPageLoading*/])
-    
+    const windowWidthHeader = useGetWindowWidth()
+    console.log(windowWidthHeader)
     if (windowWidthHeader < 1280)
         return (
             <header className="moviesheader">
@@ -23,11 +16,10 @@ function MoviesHeader({ hendlePopupOpen/*, windowWidth, hendleSavedMovies, hendl
                     hendlePopupOpen={hendlePopupOpen}
                 />
             </header>)
-    return (<header className="moviesheader">
-        <Logo />
-        <NavTab />
-        {/* hendleSavedMovies={hendleSavedMovies}
-        hendlNotSavedMovies={hendlNotSavedMovies}*/} 
-    </header>)
+    else
+        return (<header className="moviesheader">
+            <Logo />
+            <NavTab />
+        </header>)
 }
 export default MoviesHeader;

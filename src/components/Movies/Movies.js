@@ -1,133 +1,145 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
-import beatFilmApi from '../../utils/MoviesApi';
 import mainApi from '../../utils/MainApi';
 import './Movies.css';
 import Preloader from '../Preloader/Preloader';
-import { findMoviesByName, findMoviesByDuration, findMovies } from '../../utils/Movies';
-import NotFoundMap from '../NotFoundMap/NotFoundMap';
+import { findMovies } from '../../utils/Movies';
+import { useNavigate } from 'react-router-dom';
+import { SUCCESS_DELETE_MOVIE, ERROR_DELETE_MOVIE, ERROR_SAVE_MOVIE } from '../../utils/Constants';
 
-function Movies({ mainSavedMap }) {
+function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPopupOpen,
+    mainBeatFilmWhitSavedMap, isLoading, hendleTrailerPopupOpen, hendleSelectMovies }) {
 
-    const [isLoading, setIsLoading] = useState(true)
-    const [mainMap, setMainMap] = useState([]);
+    const navigate = useNavigate()
+    const [isMoviesLoading, setIsMoviesLoading] = useState(true)
+    const [mainMap, setMainMap] = useState([]);//map для отрисовки
     const [isMainMapLoading, setIsMainMapLoading] = useState(false)
-    const [savedMap, setSavedMap] = useState(mainSavedMap)
-    /*const [mapLocalStorage, setMapLocalStorage] = useState(JSON.parse(localStorage.getItem('beatFilmMap')))*/
 
-    /*useEffect(() => {
-        setMapLocalStorage(mapLocalStorage)
-    }, [mapLocalStorage])*/
 
-    const [searchMovie, setSearchMovie] = useState('')
+    useEffect(() => {
 
-    /*Поиск фильма*/
+        if (localStorage.getItem('selectedMovie')
+            && localStorage.getItem('selectedShortMovie')
+            && localStorage.getItem('selectedMoviesMap')) {
+            const searchMovies = JSON.parse(localStorage.getItem('selectedMoviesMap'));
+            setMainMap(searchMovies)
+        }
+        else {
+            setMainMap([])
+        }
+
+    }, [])
+
     function hendleFindMovies(movieName, isShortFilm) {
-        setIsLoading(false)
-        const foundMap = findMovies(movieName, isShortFilm, mainMap/*, mapLocalStorage*/)
+
+        setIsMoviesLoading(false)
+        const foundMap = findMovies(movieName, isShortFilm, mainBeatFilmWhitSavedMap)
         if (foundMap.length === 0) {
             setIsMainMapLoading(true)
-            setIsLoading(true)
-            if (localStorage.getItem('selectedMovie') === null) {
+            setIsMoviesLoading(true)
+        }
+        else {
+
+            if (localStorage.getItem('selectedMovie') === null
+                && localStorage.getItem('selectedShortMovie') === null
+                && localStorage.getItem('selectedMoviesMap')) {
                 localStorage.setItem('selectedMovie', JSON.stringify(movieName));
-                setSearchMovie(movieName)
+                localStorage.setItem('selectedShortMovie', JSON.stringify(isShortFilm));
+                localStorage.setItem('selectedMoviesMap', JSON.stringify(foundMap));
             }
             else {
                 localStorage.removeItem('selectedMovie');
+                localStorage.removeItem('selectedShortMovie');
+                localStorage.removeItem('selectedMoviesMap');
                 localStorage.setItem('selectedMovie', JSON.stringify(movieName));
-                setSearchMovie(movieName)
+                localStorage.setItem('selectedShortMovie', JSON.stringify(isShortFilm));
+                localStorage.setItem('selectedMoviesMap', JSON.stringify(foundMap));
+            }
+            setMainMap(foundMap)
+            document.location.reload();
+            setIsMoviesLoading(true)
+        }
+    }
+
+    function hendleDeleteMovies(movie) {
+        setIsMoviesLoading(false)
+        const mov = mainSavedMap.find(m => m.nameRU === movie.nameRU)
+        mainApi.deleteMovies(mov._id)
+            .then((deleteMovie) => {
+                hendleSetErrorInErrorRegPopup(SUCCESS_DELETE_MOVIE)
+                hendleErrorRegPopupOpen()
+                navigate('/movies', { replace: true })
+            })
+            .catch((e) => {
+                console.log(e)
+                hendleSetErrorInErrorRegPopup(ERROR_DELETE_MOVIE)
+                hendleErrorRegPopupOpen()
+            })
+            .finally(() => {
+                setIsMoviesLoading(true)
+            })
+        const searchMovies = JSON.parse(localStorage.getItem('selectedMoviesMap'));
+        const i = searchMovies.findIndex(m => m.nameRU === movie.nameRU);
+        searchMovies[i].isSaved = false;
+        localStorage.removeItem('selectedMoviesMap');
+        localStorage.setItem('selectedMoviesMap', JSON.stringify(searchMovies));
+        setIsMoviesLoading(true)
+    }
+
+    /*сохранение фильма*/
+    function hendleSaveMovies(movie) {
+        setIsMoviesLoading(false)
+        mainApi.saveMovies({ item: movie })
+            .then((movie) => { })
+            .catch((err) => {
+                hendleSetErrorInErrorRegPopup(ERROR_SAVE_MOVIE)
+                hendleErrorRegPopupOpen()
+                console.log(err)
+            })
+            .finally(() => {
+                setIsMoviesLoading(true)
+            })
+        const searchMovies = JSON.parse(localStorage.getItem('selectedMoviesMap'))
+        const i = searchMovies.findIndex(m => m.nameRU === movie.nameRU)
+        searchMovies[i].isSaved = true
+        localStorage.removeItem('selectedMoviesMap')
+        localStorage.setItem('selectedMoviesMap', JSON.stringify(searchMovies))
+        setIsMoviesLoading(true)
+    }
+
+    function setOldSearch() {
+        if (localStorage.getItem('selectedMovie') === null
+            && localStorage.getItem('selectedShortMovie') === null) {
+            return {
+                movieSearch: '',
+                shortMovieSearch: false
             }
         }
         else {
-            setMainMap(foundMap)
-            setIsLoading(true)
-            setIsMainMapLoading(false)
+            return {
+                movieSearch: JSON.parse(localStorage.getItem('selectedMovie')),
+                shortMovieSearch: JSON.parse(localStorage.getItem('selectedShortMovie'))
+            }
         }
-    }
-    /*удаление фильма*/
-
-    const [muvieForDelete, setMuvieForDelete] = useState()
-
-
-    /*function hendleSelectMovies(movie) {
-        setSelectedMovie(movie)
-    }*/
-
-    function hendleDeleteMovies(movie) {
-        const mov = savedMap.find(m => m.nameRU === movie.nameRU)
-        mainApi.deleteMovies(mov._id)
-            .then((deleteMovie) => {
-                const mapInLocalStorage = JSON.parse(localStorage.getItem('beatFilmMap'))
-                console.log(mapInLocalStorage)
-                mapInLocalStorage.forEach(m => {
-                    if (m._id === movie._id) { m.isSaved = false }
-                })
-                localStorage.removeItem('beatFilmMap')
-                localStorage.setItem('beatFilmMap', JSON.stringify(mapInLocalStorage))
-                /*setMapLocalStorage(localStorage.getItem('beatFilmMap'))*/
-            })
-            .catch((e) => {
-                console.log(e)
-            })
-    }
-
-    /*useEffect(() => {
-        mainApi.getMovies()
-            .then((movies) => {
-                const moviesMap = movies.data
-                console.log(`selectedMovie.nameRU: ${selectedMovie.nameRU}`)
-                console.log(moviesMap)
-                /*const mov = moviesMap.find(function(m){
-                    return m.nameRU === selectedMovie.nameRU})
-                console.log(`mov: ${mov}`)
-                setMuvieForDelete(moviesMap.find(function(m){
-                    return m.nameRU === selectedMovie.nameRU}))
-            })
-            .catch((e) => {
-                console.log(e)
-            })
-    }, [selectedMovie])
-
-    useEffect(() => {
-    console.log(`muvieForDelete: ${muvieForDelete}`)
-    }, [muvieForDelete])*/
-
-    /*сохранение фильма*/
-
-    function hendleSaveMovies(movie) {
-        mainApi.saveMovies({ item: movie })
-            .then((movie) => {
-                const mapInLocalStorage = JSON.parse(localStorage.getItem('beatFilmMap'))
-                mapInLocalStorage.forEach(m => {
-                    if (m.nameRU === movie.nameRU) m.isSaved = true
-                })
-                localStorage.removeItem('beatFilmMap')
-                localStorage.setItem('beatFilmMap', JSON.stringify(mapInLocalStorage))
-                /*setMapLocalStorage(localStorage.getItem('beatFilmMap'))*/
-            })
-            .catch((err) => console.log(err))
     }
 
     return (
         <>
             <main className='movies'>
                 <SearchForm
-                    hendleFindMovies={hendleFindMovies} 
-                    searchMovie={searchMovie}/>
-                {isLoading ?
+                    hendleFindMovies={hendleFindMovies}
+                    setOldSearch={setOldSearch} />
+                {isMoviesLoading ?
                     <MoviesCardList
                         isSavedList={false}
                         map={mainMap}
-                        /*isMoviesEmpty={isMoviesEmpty}
-                        mapForPage={mapForPage}
-                        hendlePaginateMovies={hendlePaginateMovies}*/
                         hendleSaveMovies={hendleSaveMovies}
-                        /*hendleSelectMovies={hendleSelectMovies}*/
+                        hendleSelectMovies={hendleSelectMovies}
                         hendleDeleteMovies={hendleDeleteMovies}
                         isMainMapLoading={isMainMapLoading}
-
+                        hendleTrailerPopupOpen={hendleTrailerPopupOpen}
                     />
                     : <Preloader />}
             </main>

@@ -1,11 +1,9 @@
 import React from 'react';
 import './ErrorRegPopup.css';
 import cross from '../../images/cross.svg';
-import  notSuccsess from '../../images/notSuccsess.svg';
+import notSuccsess from '../../images/notSuccsess.svg';
 
-function ErrorRegPopup({ isPopupOpen, hendlePopupClose, errorMessage}) {
-
- 
+function ErrorRegPopup({ isPopupOpen, hendlePopupClose, errorMessage }) {
 
     const errorRegPopupPopupClass = `erroregpopup ${isPopupOpen ? 'erroregpopup__opened' : ''}`
     return (

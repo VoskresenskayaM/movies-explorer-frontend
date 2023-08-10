@@ -4,12 +4,11 @@
     visibility: hidden;
     opacity: 0;
     width: 100vw;
-    min-height: 780px;
+    height: 100vh;
     z-index: 1;
     position: fixed;
     background-color: rgba(0, 0, 0, 0.7);
     flex-direction: row;
-    min-height: 706px;
     align-items: center;
 }
 
@@ -59,9 +58,3 @@
     text-align: center;
 }
 
-@media screen and (min-width: 768px) {
-    .successregpopup {
-        min-height: 650px;
-    }
-
-}

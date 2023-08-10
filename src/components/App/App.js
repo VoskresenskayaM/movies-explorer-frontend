@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import Main from '../Main/Main';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Movies from '../Movies/Movies';
 import NotFound from '../NotFound/NotFound';
 import Register from '../Register/Register';
@@ -11,16 +11,17 @@ import NavTabPopup from '../NavTabPopup/NavTabPopup';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Header from '../Header/Header';
 import Profile from '../Profile/Profile';
-import EditProfile from '../EdutProfile/EditProfile';
 import SuccessRegPopup from '../SuccessRegPopup/SuccessRegPopup';
 import ErrorRegPopup from '../ErrorRegPopup/ErrorRegPopup';
 import { register, authorize, getCurrentUser } from "../../utils/AuthApi";
 import mainApi from "../../utils/MainApi";
 import { CurrentUserContext } from '../../context/currentUserContext';
-import { TOO_MANY_REQUESTS, SUCCESS_REGISTRATION, SUCCESS_EDIT_USER } from '../../utils/Constants';
+import { TOO_MANY_REQUESTS, SUCCESS_REGISTRATION, SUCCESS_EDIT_USER, NOT_AUTH, NOT_MOVIES, NOT_REGISTER } from '../../utils/Constants';
 import { useLocation } from "react-router-dom";
 import ProtectedRouteElement from '../../utils/ProtectedRouteElement';
 import beatFilmApi from '../../utils/MoviesApi';
+import TrailerPopup from '../TrailerPopup/TrailerPopup';
+
 function App() {
 
   /*переход по страницам*/
@@ -32,69 +33,65 @@ function App() {
 
   const [loggenIn, setloggenIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({ _id: '', name: '', email: '' })
+
+  const heandleRemoveCurrentUser = () => {
+    setCurrentUser({ _id: '', name: '', email: '' })
+  }
   const handleLogin = () => {
     setloggenIn(true);
+  }
+  const handleNotLogin = () => {
+    setloggenIn(false);
   }
 
   /*попапы*/
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  /* const [isDeleteMoviesPopupOpen, setIsDeleteMoviesPopupOpen] = useState(false);*/
   const [isSuccessRegPopupOpen, setIsSuccessRegPopupOpen] = useState(false);
   const [isErrorsRegPopupOpen, setIsErrorRegPopupOpen] = useState(false);
+  const [isTrailerPopupOpen, setIsTrailerPopupOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
+  const hendleResetErrorMessage = () => {
+    setErrorMessage('')
+  }
   const hendlePopupOpen = () => {
     setIsPopupOpen(true)
   }
   const hendlePopupClose = () => {
     setIsPopupOpen(false)
   }
-  /*const hendleDeleteMoviesPopupOpen = () => {
-    setIsDeleteMoviesPopupOpen(true)
+
+  const hendleSetErrorInErrorRegPopup = (err) => {
+    setErrorMessage(err)
   }
-  const hendleDeleteMoviesPopupClose = () => {
-    setIsDeleteMoviesPopupOpen(false)
-  }*/
+
   const hendleSuccessRegPopupClose = () => {
     setIsSuccessRegPopupOpen(false)
     navigateForPage('/signin')
   }
+
+  const hendleErrorRegPopupOpen = () => {
+    setIsErrorRegPopupOpen(true)
+  }
+
   const hendleErrorRegPopupClose = () => {
     setIsErrorRegPopupOpen(false)
   }
 
-  useEffect(() => {
-    beatFilmApi.getMovies()
-      .then((movies) => {
-        if (localStorage.getItem('beatFilmMap') === null) {
-          movies.forEach(m => m.isSaved = false)
-          localStorage.setItem('beatFilmMap', JSON.stringify(movies))
-        }
-        /*localStorage.removeItem('beatFilmMap')*/
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }, [])
+  const hendleTrailerPopupOpen = () => {
+    setIsTrailerPopupOpen(true)
+  }
 
-  const [mainSavedMap, setMainSavedMap] = useState([])
+  const hendleTrailerPopupClose = () => {
+    setIsTrailerPopupOpen(false)
+  }
 
-  useEffect(() => {
-    mainApi.getMovies()
-      .then((movies) => {
-        setMainSavedMap(movies.data)
-
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }, [navigate])
-
-  let location = useLocation();
   /*проверка токена*/
-  const checkToken = useCallback(() => {
+  const location = useLocation();
 
+  const checkToken = useCallback(() => {
     if (localStorage.getItem('token')) {
       const token = localStorage.getItem('token')
       getCurrentUser(token)
@@ -107,73 +104,18 @@ function App() {
           }
         })
         .catch((err) => {
+          setErrorMessage(NOT_AUTH)
+          setIsErrorRegPopupOpen(true)
           console.log(err)
         })
     }
   }, [navigateForPage])
 
   useEffect(() => {
+
     checkToken();
+
   }, [checkToken])
-
-
-
-  /*регистрация*/
-  function registerUser(name, email, password) {
-    register(name, email, password)
-      .then((res) => {
-        if (res.status === 429) {
-          setErrorMessage(TOO_MANY_REQUESTS)
-          setIsErrorRegPopupOpen(true)
-        }
-        else if (res.status <= 300) {
-          return res.json()
-            .then((res) => {
-              setSuccessMessage(SUCCESS_REGISTRATION)
-              setIsSuccessRegPopupOpen(true)
-            })
-        }
-        else {
-          return res.json()
-        }
-      })
-      .then((res) => {
-        setErrorMessage(res.message)
-        setIsErrorRegPopupOpen(true)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
-  /*авторизация*/
-  function loginUser(email, password) {
-    authorize(email, password)
-      .then((res) => {
-        if (res.status === 429) {
-          setErrorMessage(TOO_MANY_REQUESTS)
-          setIsErrorRegPopupOpen(true)
-        }
-        else if (res.status <= 300) {
-          return res.json()
-            .then((data) => {
-              if (data.token) {
-                localStorage.setItem("token", data.token);
-                setloggenIn(true);
-                navigateForPage('/movies')
-              }
-            })
-        }
-        else return res.json()
-          .then((res) => {
-            setErrorMessage(res.message)
-            setIsErrorRegPopupOpen(true)
-          })
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
 
   /*уcтановка текущего пользователя*/
   const setUser = useCallback(() => {
@@ -194,9 +136,125 @@ function App() {
     }
   }, [loggenIn]);
 
+  /*массив со всеми фильмами*/
+  const [mainBeatFilmMap, setmainBeatFilmMap] = useState([])
+  useEffect(() => {
+    if (loggenIn) {
+      beatFilmApi.getMovies()
+        .then((movies) => {
+          movies.forEach(m => {
+            m.isSaved = false
+          })
+          setmainBeatFilmMap(movies)
+        })
+        .catch((e) => {
+          console.log(e)
+          setErrorMessage(NOT_MOVIES)
+          setIsErrorRegPopupOpen(true)
+        })
+    }
+  }, [loggenIn])
+
+  /*массив с сохраненными фильмами*/
+  const [mainSavedMap, setMainSavedMap] = useState([])
+
+  useEffect(() => {
+    if (loggenIn) {
+      mainApi.getMovies()
+        .then((movies) => {
+          setMainSavedMap(movies.data)
+        })
+        .catch((e) => {
+          console.log(e)
+          setErrorMessage(NOT_MOVIES)
+          setIsErrorRegPopupOpen(true)
+        })
+    }
+  }, [loggenIn, navigate])
+
+  /*массив для хранения всех фильмов с отметкой о сохранении*/
+  const [mainBeatFilmWhitSavedMap, setMainBeatFilmWhitSavedMap] = useState([])
+
+  useEffect(() => {
+    setIsLoading(false)
+    if (mainSavedMap.length !== 0 && mainBeatFilmMap.length !== 0) {
+      mainBeatFilmMap.forEach((mov) => {
+        mainSavedMap.forEach((sevedMov) => {
+          if (sevedMov.nameRU === mov.nameRU) mov.isSaved = true
+        })
+      })
+    }
+    setMainBeatFilmWhitSavedMap(mainBeatFilmMap)
+    setIsLoading(true)
+  }, [mainSavedMap, mainBeatFilmMap, navigate])
+
+  /*регистрация*/
+  function registerUser(name, email, password) {
+    setIsLoading(false)
+    register(name, email, password)
+      .then((res) => {
+        if (res.status === 429) {
+          setErrorMessage(TOO_MANY_REQUESTS)
+        }
+        else if (res.status <= 300) {
+          return res.json()
+            .then((res) => {
+              setSuccessMessage(SUCCESS_REGISTRATION)
+              setIsSuccessRegPopupOpen(true)
+            })
+        }
+        else return res.json()
+          .then((res) => {
+            if (res) {
+              setErrorMessage(res.message)
+            }
+          })
+      })
+      .catch((err) => {
+        setErrorMessage(NOT_REGISTER)
+        console.log(err)
+      })
+      .finally(() => {
+        setIsLoading(true)
+      })
+  }
+
+  /*авторизация*/
+  function loginUser(email, password) {
+    setIsLoading(false)
+    authorize(email, password)
+      .then((res) => {
+        if (res.status === 429) {
+          setErrorMessage(TOO_MANY_REQUESTS)
+          setIsErrorRegPopupOpen(true)
+        }
+        else if (res.status <= 300) {
+          return res.json()
+            .then((data) => {
+              if (data.token) {
+                localStorage.setItem("token", data.token);
+                setloggenIn(true);
+                navigateForPage('/movies')
+              }
+            })
+        }
+        else return res.json()
+          .then((res) => {
+            setErrorMessage(res.message)
+          })
+      })
+      .catch((err) => {
+        setErrorMessage(NOT_AUTH)
+        console.log(err)
+      })
+      .finally(() => {
+        setIsLoading(true)
+      })
+  }
+
   /*изменение данных пользователя*/
   function editUser({ item }) {
-    console.log({ item })
+    setIsLoading(false)
     mainApi.editUser({ item: item })
       .then((user) => {
         if (user) {
@@ -210,6 +268,15 @@ function App() {
         setIsErrorRegPopupOpen(errorMessage)
         console.log(err)
       })
+      .finally(() => {
+        setIsLoading(true)
+      })
+  }
+
+  const [selectedMovie, setSelectedMovie] = useState({})
+
+  function hendleSelectMovies(movie) {
+    setSelectedMovie(movie)
   }
 
   return (
@@ -219,11 +286,6 @@ function App() {
           isPopupOpen={isPopupOpen}
           hendlePopupClose={hendlePopupClose}
         />
-        {/*<DeleteMoviesPopup
-          isPopupOpen={isDeleteMoviesPopupOpen}
-          hendlePopupClose={hendleDeleteMoviesPopupClose}
-          heandleDeleteMovies={heandleDeleteMovies}
-  />*/}
         <SuccessRegPopup
           isPopupOpen={isSuccessRegPopupOpen}
           hendlePopupClose={hendleSuccessRegPopupClose}
@@ -235,46 +297,53 @@ function App() {
           errorMessage={errorMessage} />
         <Header
           hendlePopupOpen={hendlePopupOpen}
-
+        />
+        <TrailerPopup
+          isPopupOpen={isTrailerPopupOpen}
+          hendlePopupClose={hendleTrailerPopupClose}
+          selectedMovie={selectedMovie}
         />
         <Routes>
           <Route path="/" element={<Main
           />} />
-          { /* <Route path="/movies" element={<ProtectedRoute loggenIn={loggenIn} > <Movies />
-                      </ProtectedRoute>}/>*/}
           <Route path="/movies" element={<ProtectedRouteElement element={Movies}
             loggenIn={loggenIn}
             mainSavedMap={mainSavedMap}
+            mainBeatFilmWhitSavedMap={mainBeatFilmWhitSavedMap}
+            hendleSetErrorInErrorRegPopup={hendleSetErrorInErrorRegPopup}
+            hendleErrorRegPopupOpen={hendleErrorRegPopupOpen}
+            isLoading={isLoading}
+            hendleTrailerPopupOpen={hendleTrailerPopupOpen}
+            hendleSelectMovies={hendleSelectMovies}
+            selectedMovie={selectedMovie}
           />} />
-          {/* <Route path="/saved-movies" element={<ProtectedRoute loggenIn={loggenIn} > <SavedMovies/>
-                      </ProtectedRoute>}/>*/}
-          {/*<Route path="/saved-movies" element={<SavedMovies />} />*/}
           <Route path="/saved-movies" element={<ProtectedRouteElement element={SavedMovies}
             loggenIn={loggenIn}
             navigateForPage={navigateForPage}
             mainSavedMap={mainSavedMap}
+            hendleTrailerPopupOpen={hendleTrailerPopupOpen}
+            selectedMovie={selectedMovie}
+            hendleSelectMovies={hendleSelectMovies}
           />} />
           <Route path="/profile" element={<ProtectedRouteElement
             element={Profile}
             loggenIn={loggenIn}
-            navigateForPage={navigateForPage} />} />
-
-          {/*<Route path="/profile" element={loggenIn ? <Profile
-                      navigateForPage={navigateForPage}
-                    /> : <Navigate to='/signup' replace />} />*/}
-          <Route path="/editprofile" element={<ProtectedRouteElement
-            element={EditProfile}
-            loggenIn={loggenIn}
+            handleNotLogin={handleNotLogin}
+            navigateForPage={navigateForPage}
             editUser={editUser}
-          />} />
-
-          {/*<Route path="/editprofile" element={loggenIn ? <EditProfile
-                      editUser={editUser} /> : <Navigate to='/signin' replace />} />*/}
+            heandleRemoveCurrentUser={heandleRemoveCurrentUser}
+            isLoading={isLoading} />} />
           <Route path="/signin" element={<Login
             loginUser={loginUser}
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+            hendleResetErrorMessage={hendleResetErrorMessage}
           />} />
           <Route path="/signup" element={<Register
             registerUser={registerUser}
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+            hendleResetErrorMessage={hendleResetErrorMessage}
           />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>

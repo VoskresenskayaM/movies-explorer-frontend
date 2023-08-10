@@ -2,12 +2,12 @@ import React, { useState, useCallback, useEffect } from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 import NotFoundMap from '../NotFoundMap/NotFoundMap';
+import { useGetWindowWidth } from '../../hooks/useGetWindowWidth';
 
 function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
-    hendleSaveMovies, isMainMapLoading, hendleSelectMovies }) {
+    hendleSaveMovies, isMainMapLoading, hendleSelectMovies, hendleTrailerPopupOpen }) {
 
     const [mapForPage, setmapForPage] = useState([]);
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [currentPage, setCurretPage] = useState(1);
     const [moviesCountPage, setMoviesCountPage] = useState();
     const [isMoviesEmpty, setIsMoviesEmpty] = useState(false);
@@ -18,16 +18,13 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
     const [isDisabled, setIsDesabled] = useState(false);
     const [isButtonClick, setIsButtonClick] = useState(false);
 
-    const [isLoadingPage, setIsLoadingPage] = useState(false)
-
-    const hendleLoadigPage=()=> { setIsLoadingPage(!isLoadingPage) }
+    const windowWidth = useGetWindowWidth()
 
     useEffect(() => {
         setMainMap(map)
     }, [map])
 
     useEffect(() => {
-        window.onresize = () => { setWindowWidth(window.innerWidth) };
         if (windowWidth >= 1280) {
             setMarginTop(76)
             setHeightBlock(1172)
@@ -43,7 +40,6 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
         return () => { window.onresize = false; }
     }, [windowWidth])
 
-    //доделаnь, чтобы сдвигалась кнопка вниз
     function hendlePaginateMovies() {
         setCurretPage(currentPage + 1)
         if (!isButtonClick) {
@@ -66,36 +62,28 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
         setmapForPage(mainMap.slice(0, lastMoviesIndex));
     }, [lastMoviesIndex, mainMap])
 
-
     const getMapForPage = useCallback(() => {
-        window.onresize = () => { setWindowWidth(window.innerWidth) };
         if (windowWidth >= 1280) {
             setMoviesCountPage(12)
             getCurrentMoviesMap(currentPage, moviesCountPage);
-           
-
         }
         else if (windowWidth < 1280 && windowWidth >= 768) {
             setMoviesCountPage(8)
             getCurrentMoviesMap(currentPage, moviesCountPage);
-         
-
         }
         else {
             setMoviesCountPage(5)
             getCurrentMoviesMap(currentPage, moviesCountPage);
-         
-
         }
 
     }, [currentPage, windowWidth, moviesCountPage, getCurrentMoviesMap])
 
     useEffect(() => {
         getMapForPage()
-        return () => { window.onresize = false; }
     }, [getMapForPage])
 
-    const moviesCardListButton = isMoviesEmpty ? 'moviesCardList__button  moviesCardList__button-none' : 'moviesCardList__button'
+    const moviesCardListButton = isMoviesEmpty ? 'moviesCardList__button  moviesCardList__button-none' :
+        'moviesCardList__button'
 
     return (
         <section className='moviesCardList'>
@@ -108,11 +96,10 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
                                     isSavedList={isSavedList}
                                     movie={el}
                                     hendlePopupOpen={hendlePopupOpen}
-                                    /*hendleAction={hendleAction}*/
                                     hendleSelectMovies={hendleSelectMovies}
                                     hendleDeleteMovies={hendleDeleteMovies}
                                     hendleSaveMovies={hendleSaveMovies}
-                                   /* hendleLoadigPage={hendleLoadigPage}*/
+                                    hendleTrailerPopupOpen={hendleTrailerPopupOpen}
                                 />
                             </li>
                         )

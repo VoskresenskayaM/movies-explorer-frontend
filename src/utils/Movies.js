@@ -1,14 +1,9 @@
 
-
 const findMoviesByName = (movieName, moviesMap) => {
     return moviesMap.filter((m) => {
         if (m.nameRU.toLowerCase().includes(movieName.toLowerCase()) || m.nameEN.toLowerCase().includes(movieName.toLowerCase()))
             return m
     })
-}
-
-const findMoviesByDuration = (moviesMap) => {
-    return moviesMap.filter(m => m.duration < 40)
 }
 
 const findMoviesByNameyAndDuration = (movieName, moviesMap) => {
@@ -19,35 +14,13 @@ const findMoviesByNameyAndDuration = (movieName, moviesMap) => {
     })
 }
 
-export const findMovies = (fileName, isShortFilm, mainMap/*, mapInLocalStorage*/) => {
-
-    if (isShortFilm && mainMap.length !== 0) {
-        return findMoviesByDuration(mainMap)
-    }
-    else if (isShortFilm && mainMap.length === 0) {
-        const mapInLocalStorage = JSON.parse(localStorage.getItem('beatFilmMap'))
-        return findMoviesByNameyAndDuration(fileName, mapInLocalStorage)
-
-    }
-    else if (!isShortFilm && mainMap.length === 0) {
-        const mapInLocalStorage = JSON.parse(localStorage.getItem('beatFilmMap'))
-        return findMoviesByName(fileName, mapInLocalStorage)
-    }
-
-    else if (!isShortFilm && mainMap.length !== 0) {
-        const mapInLocalStorage = JSON.parse(localStorage.getItem('beatFilmMap'))
-        return findMoviesByName(fileName, mapInLocalStorage)
-    }
-    else return []
-}
-
-export const findSavedMovies = (fileName, isShortFilm, mainMap) => {
+export const findMovies = (fileName, isShortFilm, allMoviesMap) => {
 
     if (isShortFilm) {
-        return findMoviesByDuration(mainMap)
+        return findMoviesByNameyAndDuration(fileName, allMoviesMap)
     }
-    else {
-        return findMoviesByName(fileName, mainMap)
+    else  {
+   
+        return findMoviesByName(fileName, allMoviesMap)
     }
-
 }

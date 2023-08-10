@@ -4,16 +4,7 @@ import './NavTabPopup.css';
 import cross from '../../images/cross.svg';
 import Account from '../Account/Account';
 
-function NavTabPopup({ isPopupOpen, hendlePopupClose, hendleSavedMovies, hendlNotSavedMovies }) {
-    function hendleSaved (){
-        hendlePopupClose()
-        hendleSavedMovies()
-    }
-
-    function hendleNotSaved (){
-        hendlePopupClose()
-        hendlNotSavedMovies()
-    }
+function NavTabPopup({ isPopupOpen, hendlePopupClose  }) {
 
     const navTabClass = `navtabpopup ${isPopupOpen ? 'navtabpopup__opened' : ''}`
     return (
@@ -27,9 +18,9 @@ function NavTabPopup({ isPopupOpen, hendlePopupClose, hendleSavedMovies, hendlNo
                     <li className='navtabpopup__elem'><Link to="/" className='navtabpopup__elem-value'
                         onClick={hendlePopupClose}>Главная</Link></li>
                     <li className='navtabpopup__elem'><Link to="/movies" className='navtabpopup__elem-value'
-                        onClick={hendleNotSaved}>Фильмы</Link></li>
+                        onClick={hendlePopupClose}>Фильмы</Link></li>
                     <li className='navtabpopup__elem'><Link to="/saved-movies" className='navtabpopup__elem-value'
-                        onClick={hendleSaved}>Сохранённые фильмы</Link ></li>
+                        onClick={hendlePopupClose}>Сохранённые фильмы</Link ></li>
                 </ul>
                 <Account
                     hendlePopupClose={hendlePopupClose} />

@@ -4,7 +4,7 @@ import save from '../../images/icon.svg';
 function MoviesCardIcon({ hendleDeleteSavedMovies }) {
     return (
         <button className='moviesCardIcon' onClick={hendleDeleteSavedMovies}>
-            <img src={save} alt='галочка'  />
+            <img src={save} alt='галочка' />
         </button>
     )
 }

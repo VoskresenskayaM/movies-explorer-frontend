@@ -1,16 +1,16 @@
 .notfoundmap {
-display: flex;
-flex-direction: column;
-justify-content: flex-start;
-align-items: center;
-max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 300px;
 }
 
 .notfoundmap-title {
-  font-size: 20px;
-  font-weight: normal;
-  line-height: auto;
-  text-align: center;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: auto;
+    text-align: center;
 }
 
 @media screen and (min-width: 768px) {
