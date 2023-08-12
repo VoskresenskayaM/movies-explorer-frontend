@@ -56,7 +56,8 @@ function SearchForm({ hendleFindMovies, isSavedList }) {
     const soldCheckbox = (e) => {
         const { checked } = e.target
         setFormCheckbox(checked);
-        hendleFindMovies(formValue, !formCheckbox)
+        if(localStorage.getItem('selectedMovie') !== null || isSavedList===true){
+        hendleFindMovies(formValue, !formCheckbox)}
     };
 
     const handleSubmit = (e) => {

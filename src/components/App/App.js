@@ -92,6 +92,10 @@ function App() {
   /*проверка токена*/
   const [currentUR, setCurrentURL] = useState('')
 
+ const hendleSetCurrentLastURL=(url)=>{
+    setCurrentURL(url)
+  }
+
   const checkToken = useCallback(() => {
 
     if (localStorage.getItem('token')) {
@@ -265,13 +269,13 @@ function App() {
 
   /*запомнить последний url*/
   useEffect(() => {
-    const setLastURL = () => {
+    const setisLastURL = () => {
       localStorage.setItem('lastURL', JSON.stringify(currentUR))
     };
 
-    window.addEventListener("beforeunload", setLastURL);
+    window.addEventListener("beforeunload", setisLastURL);
 
-    return () => window.removeEventListener("beforeunload", setLastURL);
+    return () => window.removeEventListener("beforeunload", setisLastURL);
   }, [currentUR])
 
   return (
@@ -334,7 +338,8 @@ function App() {
             navigateForPage={navigateForPage}
             editUser={editUser}
             heandleRemoveCurrentUser={heandleRemoveCurrentUser}
-            isLoading={isLoading} />} />
+            isLoading={isLoading}
+            hendleSetCurrentLastURL={hendleSetCurrentLastURL} />} />
           <Route path="/signin" element={<Login
             loginUser={loginUser}
             isLoading={isLoading}

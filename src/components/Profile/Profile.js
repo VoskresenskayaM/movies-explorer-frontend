@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { CurrentUserContext } from '../../context/currentUserContext';
 import { useFormValidate } from '../../hooks/useFormValidate'
 
-function Profile({ navigateForPage, handleNotLogin, editUser, heandleRemoveCurrentUser, isLoading }) {
+function Profile({ navigateForPage, handleNotLogin, editUser, heandleRemoveCurrentUser, isLoading, hendleSetCurrentLastURL }) {
 
     const user = useContext(CurrentUserContext);
     const formFields = ['name', 'email']
@@ -31,6 +31,7 @@ function Profile({ navigateForPage, handleNotLogin, editUser, heandleRemoveCurre
         localStorage.removeItem('selectedMoviesMap');
         localStorage.removeItem('beatFilmMovies');
         localStorage.removeItem('lastURL');
+        hendleSetCurrentLastURL('/');
         handleNotLogin();
         heandleRemoveCurrentUser();
         navigateForPage('/');
