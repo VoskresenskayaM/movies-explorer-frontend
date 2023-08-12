@@ -2,7 +2,6 @@ import './SearchForm.css';
 import find from '../../images/find.svg';
 import find_grey from '../../images/find_grey.svg';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 function SearchForm({ hendleFindMovies, isSavedList }) {
 

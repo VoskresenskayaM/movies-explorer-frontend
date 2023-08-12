@@ -6,7 +6,6 @@ import mainApi from '../../utils/MainApi';
 import './Movies.css';
 import Preloader from '../Preloader/Preloader';
 import { findMovies } from '../../utils/Movies';
-import { useNavigate } from 'react-router-dom';
 import {  ERROR_DELETE_MOVIE, ERROR_SAVE_MOVIE } from '../../utils/Constants';
 import beatFilmApi from '../../utils/MoviesApi';
 
@@ -35,7 +34,6 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
             })
     }, [])
 
-    const navigate = useNavigate()
     const [isMoviesLoading, setIsMoviesLoading] = useState(true)
     const [mainMap, setMainMap] = useState([]);//map для отрисовки
     const [isMainMapLoading, setIsMainMapLoading] = useState(false)
