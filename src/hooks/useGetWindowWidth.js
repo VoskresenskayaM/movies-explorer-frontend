@@ -2,14 +2,15 @@ import { useState, useLayoutEffect } from 'react';
 
 export const useGetWindowWidth = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  console.log(window.innerWidth)
+ 
+ 
   useLayoutEffect(() => {
+
     const getWidth = () => {
       setWindowWidth(window.innerWidth);
-      console.log(windowWidth)
     };
-    window.addEventListener("resize", getWidth);
-    var resizeTimeout;
+
+    let resizeTimeout;
     function resizeThrottler() {
       if (!resizeTimeout) {
         resizeTimeout = setTimeout(function () {
@@ -18,6 +19,8 @@ export const useGetWindowWidth = () => {
         }, 500);
       }
     }
+    window.addEventListener("resize", resizeThrottler);
+    getWidth()
     return () => window.removeEventListener("resize", resizeThrottler);
   }, [])
   return windowWidth;

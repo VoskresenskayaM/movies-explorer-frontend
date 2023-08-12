@@ -1,32 +1,47 @@
 .moviesheader {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
+    width: 100%;
+}
+
+.moviesheader_blue {
+    background-color: #465DFF;
+    
+}
+
+.moviesheader-block{
     min-width: 292px;
     min-height: 74px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
 }
 
 @media screen and (min-width: 520px) {
-    .moviesheader {
+    .moviesheader-block{ 
         min-width: 500px;
     }
 }
 
 @media screen and (min-width: 768px) {
-    .moviesheader {
+
+    .moviesheader-block{
         min-width: 708px;
+
     }
 }
 
 @media screen and (min-width: 1024px) {
-    .moviesheader {
+    .moviesheader-block{ 
         min-width: 900px;
     }
 }
 
 @media screen and (min-width: 1280px) {
-    .moviesheader {
+
+    .moviesheader-block{
         min-width: 1140px;
     }
 }

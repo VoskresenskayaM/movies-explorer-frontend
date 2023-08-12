@@ -6,18 +6,19 @@ import React, { useEffect } from 'react';
 import { useFormValidate } from '../../hooks/useFormValidate';
 import Preloader from '../Preloader/Preloader';
 
-function Login({ loginUser, isLoading, errorMessage, hendleResetErrorMessage }) {
-
+function Login({ loginUser, isLoading, errorMessage, hendleResetErrorMessage}) {
+  
     useEffect(() => {
         hendleResetErrorMessage()
     }, [])
 
     const formFields = ['email', 'password']
     const { isValidInputs, errors, formValue, handleChange, isFormValid } = useFormValidate(...formFields)
-
+  
     const handleSubmit = (e) => {
         e.preventDefault();
         loginUser(formValue.email, formValue.password)
+     
     }
 
     return (

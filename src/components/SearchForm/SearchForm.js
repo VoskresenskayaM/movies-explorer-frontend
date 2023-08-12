@@ -2,20 +2,31 @@ import './SearchForm.css';
 import find from '../../images/find.svg';
 import find_grey from '../../images/find_grey.svg';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function SearchForm({ hendleFindMovies, setOldSearch }) {
+function SearchForm({ hendleFindMovies, isSavedList }) {
 
-    const isOldSearch = setOldSearch()
-
-    const [formValue, setFormValue] = useState(isOldSearch.movieSearch)
-    const [formCheckbox, setFormCheckbox] = useState(isOldSearch.shortMovieSearch)
+    const [formValue, setFormValue] = useState('')
+    const [formCheckbox, setFormCheckbox] = useState(false)
     const [error, setErrors] = useState('')
     const [isValidInput, setIsValidInputs] = useState(false)
     const [isFormValid, setIsFormValid] = useState(false)
 
-    const handleChange = (e) => {
-        const {  value } = e.target;
+    useEffect(() => {
+        if (isSavedList === false) {
+            if (localStorage.getItem('selectedMovie') !== null
+                && localStorage.getItem('selectedShortMovie') !== null) {
+                const val = JSON.parse(localStorage.getItem('selectedMovie'))
+                setFormValue(val);
+                setIsValidInputs(true)
+                const short = JSON.parse(localStorage.getItem('selectedShortMovie'))
+                setFormCheckbox(short)
+            }
+        }
+    }, [isSavedList])
 
+    const handleChange = (e) => {
+        const { value } = e.target;
         if (value.length === 0 || value.length === undefined) {
             setErrors("Заполните это поле");
             setIsValidInputs(false)
@@ -42,24 +53,11 @@ function SearchForm({ hendleFindMovies, setOldSearch }) {
             setIsFormValid(true)
         else setIsFormValid(false)
     }, [isValidInput, error, formValue])
-    
-    useEffect(()=>{
-        if(localStorage.getItem('selectedMovie')){
-            const val =JSON.parse(localStorage.getItem('selectedMovie'))
-            setFormValue(val);
-            setIsValidInputs(true)
-        }
-    },[formCheckbox])
-
-    useEffect(()=>{
-        if(hendleFindMovies.legth===0){
-            setIsValidInputs(false)
-        }
-    },[])
 
     const soldCheckbox = (e) => {
         const { checked } = e.target
         setFormCheckbox(checked);
+        hendleFindMovies(formValue, !formCheckbox)
     };
 
     const handleSubmit = (e) => {
@@ -70,7 +68,7 @@ function SearchForm({ hendleFindMovies, setOldSearch }) {
     const searchFormInputError = isValidInput ? 'searchForm__form-input-error' :
         'searchForm__form-input-error searchForm__form-input-error_active'
 
-  const buttonClassName = `searchForm__form-button  ${!isFormValid ? 'searchForm__form-button_inactive' : ''}`
+    const buttonClassName = `searchForm__form-button  ${!isFormValid ? 'searchForm__form-button_inactive' : ''}`
 
     return (
         <section className='searchForm'>
@@ -99,7 +97,7 @@ function SearchForm({ hendleFindMovies, setOldSearch }) {
                                 className='searchForm__toggle-input'
                                 type='checkbox'
                                 name='isShortFilm'
-                                checked={formCheckbox}
+                                checked={formCheckbox || false}
                                 onChange={soldCheckbox} />
                             <span className='searchForm__slider'></span>
                         </label>

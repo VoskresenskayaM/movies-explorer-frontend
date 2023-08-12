@@ -12,10 +12,11 @@ class MoviesApi {
         })
             .then((res) => {
                 if (res.ok) {
-                    return res.json() ;
+                    return res.json();
                 }
                 return Promise.reject(`произошла ошибка на сервере`);
             })
+          
     }
 }
 
@@ -27,4 +28,3 @@ class MoviesApi {
     });
 
     export default beatFilmApi;
-    

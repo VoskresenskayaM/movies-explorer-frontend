@@ -12,6 +12,17 @@ export const ERROR_DELETE_MOVIE  = 'Не удалось удалить филь�
 export const ERROR_SAVE_MOVIE = 'Не удалось сохранить фильм';
 
 export const VALIDATE_PASSWORD = /[0-9a-zA-Z!@#$%^&*]{6,20}/;
-export const VALIDATE_NAME = /^[а-яА-ЯёЁa-zA-Z\s/-]+$/
+export const VALIDATE_NAME = /^[а-яА-ЯёЁa-zA-Z\s/-]+$/;
+export const LAPTOP = 1280;
+export const PLANSHET = 768;
+export const MOBULE = 320;
+
+export const LAPTOP_COUNT_CARD = 12;
+export const PLANSHET_COUNT_CARD = 8;
+export const MOBULE_COUNT_CARD = 5;
+
+
+
+
 
 

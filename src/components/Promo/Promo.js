@@ -3,7 +3,6 @@ import './Promo.css';
 import Earth from '../../images/Earth.svg'
 import { HashLink as Link } from 'react-router-hash-link';
 
-
 function Promo() {
     return (
         <section className='promo'>

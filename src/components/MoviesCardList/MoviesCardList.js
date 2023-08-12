@@ -3,6 +3,8 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 import NotFoundMap from '../NotFoundMap/NotFoundMap';
 import { useGetWindowWidth } from '../../hooks/useGetWindowWidth';
+import {LAPTOP, PLANSHET, LAPTOP_COUNT_CARD, PLANSHET_COUNT_CARD, MOBULE_COUNT_CARD } from '../../utils/Constants';
+
 
 function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
     hendleSaveMovies, isMainMapLoading, hendleSelectMovies, hendleTrailerPopupOpen }) {
@@ -25,11 +27,11 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
     }, [map])
 
     useEffect(() => {
-        if (windowWidth >= 1280) {
+        if (windowWidth >= LAPTOP) {
             setMarginTop(76)
             setHeightBlock(1172)
         }
-        else if (windowWidth < 1280 && windowWidth >= 768) {
+        else if (windowWidth < LAPTOP&& windowWidth >= 768) {
             setMarginTop(60)
             setHeightBlock(1128)
         }
@@ -59,20 +61,20 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
             setIsMoviesEmpty(false)
             setIsDesabled(false)
         }
-        setmapForPage(mainMap.slice(0, lastMoviesIndex));
+        setmapForPage(Array.from(mainMap).slice(0, lastMoviesIndex));
     }, [lastMoviesIndex, mainMap])
 
     const getMapForPage = useCallback(() => {
-        if (windowWidth >= 1280) {
-            setMoviesCountPage(12)
+        if (windowWidth >= LAPTOP) {
+            setMoviesCountPage(LAPTOP_COUNT_CARD)
             getCurrentMoviesMap(currentPage, moviesCountPage);
         }
-        else if (windowWidth < 1280 && windowWidth >= 768) {
-            setMoviesCountPage(8)
+        else if (windowWidth < LAPTOP && windowWidth >= PLANSHET) {
+            setMoviesCountPage(PLANSHET_COUNT_CARD)
             getCurrentMoviesMap(currentPage, moviesCountPage);
         }
         else {
-            setMoviesCountPage(5)
+            setMoviesCountPage(MOBULE_COUNT_CARD)
             getCurrentMoviesMap(currentPage, moviesCountPage);
         }
 
@@ -90,8 +92,8 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
             {isMainMapLoading ? <NotFoundMap /> :
                 <>
                     <ul className='moviesCardList__list'>
-                        {mapForPage.map((el, index, _) => (
-                            <li key={index}>
+                        {mapForPage.map((el) => (
+                            <li key={el._id || el.id}>
                                 <MoviesCard
                                     isSavedList={isSavedList}
                                     movie={el}

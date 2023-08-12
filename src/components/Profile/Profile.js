@@ -13,25 +13,27 @@ function Profile({ navigateForPage, handleNotLogin, editUser, heandleRemoveCurre
     const [isFormValidProfile, setIsValidProfile] = useState(false)
 
     useEffect(() => {
-        if (formValue.email === '' || formValue.name === '') {
+ 
+        if ( formValue.name === user.name && formValue.email === user.email) {
             setIsValidProfile(false)
         }
-        else if (formValue.name === user.name || formValue.email === user.email) {
+        else if (isFormValid===false) {
             setIsValidProfile(false)
         }
-        else if (formValue.name !== user.name && formValue.email !== user.email && isFormValid) {
-            setIsValidProfile(true)
-        }
-    }, [formValue.name, formValue.email, isFormValid])
+        else setIsValidProfile(true)
+
+    }, [formValue.name, formValue.email, isFormValid, isLoading])
 
     function signOut() {
         localStorage.removeItem('token');
         localStorage.removeItem('selectedMovie');
         localStorage.removeItem('selectedShortMovie');
         localStorage.removeItem('selectedMoviesMap');
+        localStorage.removeItem('beatFilmMovies');
+        localStorage.removeItem('lastURL');
         handleNotLogin();
         heandleRemoveCurrentUser();
-        navigateForPage('/signin');
+        navigateForPage('/');
     }
 
     const handleSubmit = (e) => {

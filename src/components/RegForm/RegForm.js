@@ -2,7 +2,7 @@ import './RegForm.css';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import ErrorMessageFromForm from '../ErrorMessageFromForm/ErrorMessageFromForm';
 
-function RegForm({ buttonValue, children, hendlePopupOpen, handleSubmit, isFormValid, errorMessage }) {
+function RegForm({ buttonValue, children, hendlePopupOpen, handleSubmit, isFormValid, errorMessage}) {
 
     const isFormValidButton = errorMessage === '' ? isFormValid : false
 
@@ -19,6 +19,7 @@ function RegForm({ buttonValue, children, hendlePopupOpen, handleSubmit, isFormV
                 isFormValid={isFormValidButton}
                 hendlePopupOpen={hendlePopupOpen}
                 handleSubmit={handleSubmit}
+             
             />
         </form>)
 }

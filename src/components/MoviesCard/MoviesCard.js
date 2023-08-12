@@ -12,7 +12,6 @@ function MoviesCard({ movie, isSavedList, hendlePopupOpen,
         hendleSelectMovies(movie)
         hendleTrailerPopupOpen()
     }
-
     const [isSaved, setIsSaved] = useState(movie.isSaved);
 
     const handleSave = () => {
