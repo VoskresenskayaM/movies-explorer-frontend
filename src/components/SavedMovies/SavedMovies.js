@@ -2,27 +2,26 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import { useEffect, useState } from 'react';
-import mainApi from "../../utils/MainApi";
 import Preloader from '../Preloader/Preloader';
 import DeleteMoviesPopup from '../DeleteMoviesPopup/DeleteMoviesPopup';
 import { findMovies } from '../../utils/Movies';
 import TrailerPopup from '../TrailerPopup/TrailerPopup';
-import { ERROR_DELETE_MOVIE } from '../../utils/Constants';
 import './SavedMovies.css';
 
-function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleSetErrorInErrorRegPopup, hendleErrorRegPopupOpen }) {
+function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDeleteSavedMovie, hendleFoundSavedMovie, hendleFindShort, getSavedMovies, hendleSetMainMapLoading, isMainMapLoading }) {
 
-    const [isMainMapLoading, setIsMainMapLoading] = useState(false)
+    /*const [isMainMapLoading, setIsMainMapLoading] = useState(false)*/
     const [isLoadingSavedMovies, setIsLoadingSavedMovies] = useState(true)
-    const [mainMap, setMainMap] = useState(mainSavedMap)
     const [isDeleteMoviesPopupOpen, setIsDeleteMoviesPopupOpen] = useState(false);
     const [isTrailerPopupOpen, setIsTrailerPopupOpen] = useState(false);
 
     useEffect(() => {
-        setIsLoadingSavedMovies(false)
-        setMainMap(mainSavedMap)
-        setIsLoadingSavedMovies(true)
-    }, [mainSavedMap])
+        getSavedMovies()
+     
+        /*if (JSON.parse(localStorage.getItem('selectedShortMovie')) === true)
+        hendleFoundSavedMovie(mainSavedMap.filter(m => m.duration < 40))*/
+    }, [])
+
 
     const hendleDeleteMoviesPopupOpen = () => {
         setIsDeleteMoviesPopupOpen(true)
@@ -41,45 +40,28 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleSe
 
     function hendleFindMovies(movieName, isShortFilm) {
         setIsLoadingSavedMovies(false)
+
         const foundMap = findMovies(movieName, isShortFilm, mainSavedMap)
         if (foundMap.length === 0) {
-            setIsMainMapLoading(true)
-            setMainMap(foundMap)
+            hendleSetMainMapLoading(true)
+            /*setIsMainMapLoading(true)*/
+            hendleFoundSavedMovie(foundMap)
             setIsLoadingSavedMovies(true)
         }
         else {
-            setMainMap(foundMap)
+            hendleFoundSavedMovie(foundMap)
             setIsLoadingSavedMovies(true)
-            setIsMainMapLoading(false)
+            hendleSetMainMapLoading(false)
+            /*setIsMainMapLoading(false)*/
         }
     }
+
     /*удаление фильма*/
-    async function hendleDeleteMovies() {
+    function hendleDelete() {
+        hendleDeleteMoviesPopupClose()
         setIsLoadingSavedMovies(false);
-        await mainApi.deleteMovies(selectedMovie._id)
-            .then((deleteMovie) => {
-                hendleDeleteMoviesPopupClose()
-                const map = mainMap.filter(m => m._id !== selectedMovie._id)
-                setMainMap(map)
-                const searchMovies = JSON.parse(localStorage.getItem('selectedMoviesMap'));
-                const i = searchMovies.findIndex(m => m.nameRU === deleteMovie.nameRU);
-                searchMovies[i].isSaved = false;
-                localStorage.removeItem('selectedMoviesMap');
-                localStorage.setItem('selectedMoviesMap', JSON.stringify(searchMovies));
-                let copyMainWhithLike = JSON.parse(localStorage.getItem('beatFilmMovies'))
-                const k = copyMainWhithLike.findIndex(m => m.nameRU === selectedMovie.nameRU)
-                copyMainWhithLike[k].isSaved = false
-                localStorage.removeItem('beatFilmMovies');
-                localStorage.setItem('beatFilmMovies', JSON.stringify(copyMainWhithLike));
-            })
-            .catch((err) => {
-                console.log(err)
-                hendleSetErrorInErrorRegPopup(ERROR_DELETE_MOVIE)
-                hendleErrorRegPopupOpen()
-            })
-            .finally(() => {
-                setIsLoadingSavedMovies(true);
-            })
+        hendleDeleteSavedMovie(selectedMovie._id)
+        setIsLoadingSavedMovies(true);
     }
 
     return (
@@ -87,9 +69,9 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleSe
             <DeleteMoviesPopup
                 isPopupOpen={isDeleteMoviesPopupOpen}
                 hendlePopupClose={hendleDeleteMoviesPopupClose}
-                hendleDeleteMovies={hendleDeleteMovies}
+                hendleDeleteMovies={hendleDelete}
                 isSavedList={true}
-    />
+            />
             <TrailerPopup
                 isPopupOpen={isTrailerPopupOpen}
                 hendlePopupClose={hendleTrailerPopupClose}
@@ -100,12 +82,14 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleSe
                 <SearchForm
                     hendleFindMovies={hendleFindMovies}
                     /*setOldSearch={setOldSearch}*/
-                    isSavedList={true} />
+                    isSavedList={true}
+                    map={mainSavedMap}
+                    hendleFindShort={hendleFindShort} />
                 {isLoadingSavedMovies ?
                     <MoviesCardList
                         isSavedList={true}
                         hendlePopupOpen={hendleDeleteMoviesPopupOpen}
-                        map={mainMap}
+                        map={mainSavedMap}
                         hendleSelectMovies={hendleSelectMovies}
                         isMainMapLoading={isMainMapLoading}
                         hendleTrailerPopupOpen={hendleTrailerPopupOpen}

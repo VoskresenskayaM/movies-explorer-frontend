@@ -16,11 +16,10 @@ import ErrorRegPopup from '../ErrorRegPopup/ErrorRegPopup';
 import { register, authorize, getCurrentUser } from "../../utils/AuthApi";
 import mainApi from "../../utils/MainApi";
 import { CurrentUserContext } from '../../context/currentUserContext';
-import { TOO_MANY_REQUESTS, SUCCESS_REGISTRATION, SUCCESS_EDIT_USER, NOT_AUTH, NOT_MOVIES, NOT_REGISTER } from '../../utils/Constants';
+import { TOO_MANY_REQUESTS, SUCCESS_REGISTRATION, SUCCESS_EDIT_USER, NOT_AUTH, NOT_MOVIES, NOT_REGISTER, ERROR_EDIT_PROFILE, ERROR_DELETE_MOVIE } from '../../utils/Constants';
 import { useLocation } from "react-router-dom";
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import TrailerPopup from '../TrailerPopup/TrailerPopup';
-
 
 
 function App() {
@@ -90,12 +89,6 @@ function App() {
   }
 
   /*проверка токена*/
-  const [currentUR, setCurrentURL] = useState('')
-
- const hendleSetCurrentLastURL=(url)=>{
-    setCurrentURL(url)
-  }
-
   const checkToken = useCallback(() => {
 
     if (localStorage.getItem('token')) {
@@ -107,15 +100,7 @@ function App() {
             if (location.pathname === '/signup' || location.pathname === '/signin') {
               navigateForPage("/movies");
             }
-            else if (localStorage.getItem('lastURL') !== null) {
-              navigateForPage(JSON.parse(localStorage.getItem('lastURL')));
-              localStorage.removeItem('lastURL')
-            }
-
-            else {
-              setCurrentURL(location.pathname)
-              console.log(currentUR)
-            }
+            else navigateForPage(location.pathname)
           }
         })
         .catch((err) => {
@@ -124,10 +109,11 @@ function App() {
           console.log(err)
         })
     }
-  }, [navigate])
+
+  }, [loggenIn])
 
   useEffect(() => {
-    checkToken();
+    checkToken()
   }, [checkToken])
 
   /*уcтановка текущего пользователя*/
@@ -152,20 +138,52 @@ function App() {
   /*массив с сохраненными фильмами*/
   const [mainSavedMap, setMainSavedMap] = useState([])
 
-  const heandlePushInSavedMap = (movie) => {
-    setMainSavedMap([...mainSavedMap, movie])
+  /*переключение лайков */
+  const toggeMovie = (param, movie) => {
+    const mainWhithLike = JSON.parse(localStorage.getItem('beatFilmMovies')).map(m => m.id === movie.id ? m = Object.assign(m, { ownerID: param }) : m)
+    localStorage.removeItem('beatFilmMovies');
+    localStorage.setItem('beatFilmMovies', JSON.stringify(mainWhithLike));
+    const localStorageWhithLike = JSON.parse(localStorage.getItem('selectedMoviesMap')).map(m => m.id === movie.id ? m = Object.assign(m, { ownerID: param }) : m)
+    localStorage.removeItem('selectedMoviesMap');
+    localStorage.setItem('selectedMoviesMap', JSON.stringify(localStorageWhithLike));
+    getSavedMovies()
+    return localStorageWhithLike
   }
 
-  const heandleDeleteInSavedMap = (movie) => {
-    const map = Array.from(mainSavedMap).filter(m => m.id !== movie.id)
-    setMainSavedMap(map)
+  /*удаление сохраннного фильма*/
+  async function hendleDeleteSavedMovie(id) {
+    await mainApi.deleteMovies(id)
+      .then((deleteMovie) => {
+        if (deleteMovie) {
+          const mainWhithLike = JSON.parse(localStorage.getItem('beatFilmMovies')).map(m => m.ownerID === id ? m = Object.assign(m, { ownerID: null }) : m)
+          localStorage.removeItem('beatFilmMovies');
+          localStorage.setItem('beatFilmMovies', JSON.stringify(mainWhithLike));
+          const localStorageWhithLike = JSON.parse(localStorage.getItem('selectedMoviesMap'))
+          localStorage.removeItem('selectedMoviesMap');
+          localStorage.setItem('selectedMoviesMap', JSON.stringify(localStorageWhithLike.map(m => m.ownerID === id ? m = Object.assign(m, { ownerID: null }) : m)));
+        }
+        if (JSON.parse(localStorage.getItem('selectedShortMovie') === true))
+          setMainSavedMap(mainSavedMap.filter(m => m._id !== id && m.duration < 40))
+        else
+          setMainSavedMap(mainSavedMap.filter(m => m._id !== id))
+      })
+      .catch((err) => {
+        console.log(err)
+        hendleSetErrorInErrorRegPopup(ERROR_DELETE_MOVIE)
+        hendleErrorRegPopupOpen()
+      })
   }
 
-  useEffect(() => {
+  const getSavedMovies = (() => {
     if (loggenIn) {
       mainApi.getMovies()
         .then((movies) => {
-          setMainSavedMap(movies.data)
+          if (movies) {
+            setMainSavedMap(movies.data)
+          }
+          else {
+            setMainSavedMap([])
+          }
         })
         .catch((e) => {
           console.log(e)
@@ -173,7 +191,37 @@ function App() {
           setIsErrorRegPopupOpen(true)
         })
     }
+  })
+
+  useEffect(() => {
+    getSavedMovies()
   }, [loggenIn])
+
+  /*фильтр короткометражек для сохраненных фильмов */
+  const [isMainMapLoading, setIsMainMapLoading] = useState(false)
+
+  const hendleSetMainMapLoading = (param) => {
+    setIsMainMapLoading(param)
+  }
+
+  const heandleFoundShortSavedMovie = (short) => {
+    if (short === true) {
+      const shortMovies = mainSavedMap.filter(m => m.duration < 40)
+      if (shortMovies.length === 0) setIsMainMapLoading(true)
+      else {
+        setMainSavedMap(mainSavedMap.filter(m => m.duration < 40))
+        setIsMainMapLoading(false)
+      }
+    }
+    else {
+      getSavedMovies()
+      setIsMainMapLoading(false)
+    }
+  }
+  /*отрисовка найденых сохраннных фильмов*/
+  const hendleFoundSavedMovie = (map) => {
+    setMainSavedMap(map)
+  }
 
   /*авторизация*/
   function loginUser(email, password) {
@@ -252,8 +300,7 @@ function App() {
         }
       })
       .catch((err) => {
-        setErrorMessage(err.message)
-        setIsErrorRegPopupOpen(errorMessage)
+        setErrorMessage(ERROR_EDIT_PROFILE)
         console.log(err)
       })
       .finally(() => {
@@ -266,17 +313,6 @@ function App() {
   function hendleSelectMovies(movie) {
     setSelectedMovie(movie)
   }
-
-  /*запомнить последний url*/
-  useEffect(() => {
-    const setisLastURL = () => {
-      localStorage.setItem('lastURL', JSON.stringify(currentUR))
-    };
-
-    window.addEventListener("beforeunload", setisLastURL);
-
-    return () => window.removeEventListener("beforeunload", setisLastURL);
-  }, [currentUR])
 
   return (
     <div className="app">
@@ -317,8 +353,8 @@ function App() {
             hendleTrailerPopupOpen={hendleTrailerPopupOpen}
             hendleSelectMovies={hendleSelectMovies}
             selectedMovie={selectedMovie}
-            heandlePushInSavedMap={heandlePushInSavedMap}
-            heandleDeleteInSavedMap={heandleDeleteInSavedMap}
+            toggeMovie={toggeMovie}
+            hendleDeleteSavedMovie={hendleDeleteSavedMovie}
           />} />
           <Route path="/saved-movies" element={<ProtectedRouteElement
             element={SavedMovies}
@@ -328,8 +364,12 @@ function App() {
             hendleTrailerPopupOpen={hendleTrailerPopupOpen}
             selectedMovie={selectedMovie}
             hendleSelectMovies={hendleSelectMovies}
-            hendleSetErrorInErrorRegPopup={hendleSetErrorInErrorRegPopup}
-            hendleErrorRegPopupOpen={hendleErrorRegPopupOpen}
+            hendleDeleteSavedMovie={hendleDeleteSavedMovie}
+            hendleFindShort={heandleFoundShortSavedMovie}
+            hendleFoundSavedMovie={hendleFoundSavedMovie}
+            getSavedMovies={getSavedMovies}
+            hendleSetMainMapLoading={hendleSetMainMapLoading}
+            isMainMapLoading={isMainMapLoading}
           />} />
           <Route path="/profile" element={<ProtectedRouteElement
             element={Profile}
@@ -339,7 +379,8 @@ function App() {
             editUser={editUser}
             heandleRemoveCurrentUser={heandleRemoveCurrentUser}
             isLoading={isLoading}
-            hendleSetCurrentLastURL={hendleSetCurrentLastURL} />} />
+            errorMessage={errorMessage}
+            hendleResetErrorMessage={hendleResetErrorMessage} />} />
           <Route path="/signin" element={<Login
             loginUser={loginUser}
             isLoading={isLoading}
@@ -352,7 +393,8 @@ function App() {
             errorMessage={errorMessage}
             hendleResetErrorMessage={hendleResetErrorMessage}
           />} />
-          <Route path="/*" element={<NotFound />} />
+          <Route path="*" element={<NotFound />} />
+
         </Routes>
       </CurrentUserContext.Provider>
     </div>

@@ -3,7 +3,7 @@ import find from '../../images/find.svg';
 import find_grey from '../../images/find_grey.svg';
 import { useEffect, useState } from 'react';
 
-function SearchForm({ hendleFindMovies, isSavedList }) {
+function SearchForm({ hendleFindMovies, isSavedList, hendleFindShort }) {
 
     const [formValue, setFormValue] = useState('')
     const [formCheckbox, setFormCheckbox] = useState(false)
@@ -13,16 +13,17 @@ function SearchForm({ hendleFindMovies, isSavedList }) {
 
     useEffect(() => {
         if (isSavedList === false) {
-            if (localStorage.getItem('selectedMovie') !== null
-                && localStorage.getItem('selectedShortMovie') !== null) {
+            if (localStorage.getItem('selectedMovie') !== null) {
                 const val = JSON.parse(localStorage.getItem('selectedMovie'))
                 setFormValue(val);
-                setIsValidInputs(true)
-                const short = JSON.parse(localStorage.getItem('selectedShortMovie'))
-                setFormCheckbox(short)
+                setIsValidInputs(false)
+                if (localStorage.getItem('selectedShortMovie') !== null) {
+                    const short = JSON.parse(localStorage.getItem('selectedShortMovie'))
+                    setFormCheckbox(short)
+                }
             }
         }
-    }, [isSavedList])
+    }, [])
 
     const handleChange = (e) => {
         const { value } = e.target;
@@ -55,9 +56,19 @@ function SearchForm({ hendleFindMovies, isSavedList }) {
 
     const soldCheckbox = (e) => {
         const { checked } = e.target
+        if (localStorage.getItem('selectedShortMovie') !== null) {
+            localStorage.removeItem('selectedShortMovie')
+            localStorage.setItem('selectedShortMovie', JSON.stringify(checked))
+        }
+        else localStorage.setItem('selectedShortMovie', JSON.stringify(checked))
         setFormCheckbox(checked);
-        if(localStorage.getItem('selectedMovie') !== null || isSavedList===true){
-        hendleFindMovies(formValue, !formCheckbox)}
+        if (isSavedList) {
+            hendleFindShort(checked)
+        }
+        else {
+            if (localStorage.getItem('selectedMoviesMap') !== null)
+                hendleFindShort(checked)
+        }
     };
 
     const handleSubmit = (e) => {

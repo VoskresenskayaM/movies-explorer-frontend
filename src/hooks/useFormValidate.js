@@ -1,17 +1,12 @@
-import { useState, useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect} from 'react';
 import validator from "validator";
 import { VALIDATE_PASSWORD, VALIDATE_NAME } from '../utils/Constants';
-import { CurrentUserContext } from '../context/currentUserContext';
 
 export const useFormValidate = (...args) => {
-    const location = useLocation()
     const [formValue, setFormValue] = useState({})
     const [errors, setErrors] = useState({})
     const [isValidInputs, setIsValidInputs] = useState({})
-
-    const user = useContext(CurrentUserContext);
-
+    
     useEffect(() => {
         args.forEach(val => {
             formValue[val] = ''
@@ -24,18 +19,6 @@ export const useFormValidate = (...args) => {
     }, [])
 
         const [isFormValid, setIsFormValid] = useState(false)
-    useEffect(() => {
-        if (location.pathname === '/profile') {
-            setFormValue({
-                'name': user.name,
-                'email': user.email
-            });
-            setIsValidInputs({
-                'nameIsVaild': true,
-                'emailIsValid': true
-            })
-        }
-    }, [])
 
     const validate = (name, value) => {
         switch (name) {

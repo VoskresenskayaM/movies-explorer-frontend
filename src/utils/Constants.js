@@ -10,6 +10,7 @@ export const NOT_MOVIES = 'Фильмы нe загружены, провeрьт�
 export const SUCCESS_DELETE_MOVIE = 'Фильм успешно удален';
 export const ERROR_DELETE_MOVIE  = 'Не удалось удалить фильм';
 export const ERROR_SAVE_MOVIE = 'Не удалось сохранить фильм';
+export const ERROR_EDIT_PROFILE = 'При обновлении профиля произошла ошибка.'
 
 export const VALIDATE_PASSWORD = /[0-9a-zA-Z!@#$%^&*]{6,20}/;
 export const VALIDATE_NAME = /^[а-яА-ЯёЁa-zA-Z\s/-]+$/;

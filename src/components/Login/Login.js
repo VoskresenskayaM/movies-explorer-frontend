@@ -18,7 +18,6 @@ function Login({ loginUser, isLoading, errorMessage, hendleResetErrorMessage}) {
     const handleSubmit = (e) => {
         e.preventDefault();
         loginUser(formValue.email, formValue.password)
-     
     }
 
     return (

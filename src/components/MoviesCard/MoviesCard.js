@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './MoviesCard.css';
 import MoviesCardSave from '../MoviesCardSave/MoviesCardSave';
 import MoviesCardDelete from '../MoviesCardDelete/MoviesCardDelete';
@@ -12,16 +12,16 @@ function MoviesCard({ movie, isSavedList, hendlePopupOpen,
         hendleSelectMovies(movie)
         hendleTrailerPopupOpen()
     }
-    const [isSaved, setIsSaved] = useState(movie.isSaved);
+    const [isSaved, setIsSaved] = useState(false)
+    useEffect(() => {
+        setIsSaved(movie.ownerID === null ? false : true)
+    }, [movie])
 
     const handleSave = () => {
         hendleSaveMovies(movie)
-        setIsSaved(true);
     }
-
     const hendleDeleteSavedMovies = () => {
         hendleDeleteMovies(movie)
-        setIsSaved(false);
     }
 
     const hendleDelete = () => {

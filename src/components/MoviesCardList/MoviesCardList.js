@@ -7,7 +7,7 @@ import {LAPTOP, PLANSHET, LAPTOP_COUNT_CARD, PLANSHET_COUNT_CARD, MOBULE_COUNT_C
 
 
 function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
-    hendleSaveMovies, isMainMapLoading, hendleSelectMovies, hendleTrailerPopupOpen }) {
+    hendleSaveMovies, isMainMapLoading, hendleSelectMovies, hendleTrailerPopupOpen, isSavedMovie }) {
 
     const [mapForPage, setmapForPage] = useState([]);
     const [currentPage, setCurretPage] = useState(1);
@@ -19,7 +19,7 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
     const [heightBlock, setHeightBlock] = useState(0);
     const [isDisabled, setIsDesabled] = useState(false);
     const [isButtonClick, setIsButtonClick] = useState(false);
-
+  
     const windowWidth = useGetWindowWidth()
 
     useEffect(() => {
@@ -93,7 +93,7 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
                 <>
                     <ul className='moviesCardList__list'>
                         {mapForPage.map((el) => (
-                            <li key={el._id || el.id}>
+                            <li key={ el.id||el._id }>
                                 <MoviesCard
                                     isSavedList={isSavedList}
                                     movie={el}
@@ -102,6 +102,8 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
                                     hendleDeleteMovies={hendleDeleteMovies}
                                     hendleSaveMovies={hendleSaveMovies}
                                     hendleTrailerPopupOpen={hendleTrailerPopupOpen}
+                                    isSavedMovie={isSavedMovie}
+                                    mainMap={mainMap}
                                 />
                             </li>
                         )
