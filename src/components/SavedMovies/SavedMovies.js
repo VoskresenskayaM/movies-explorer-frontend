@@ -8,20 +8,16 @@ import { findMovies } from '../../utils/Movies';
 import TrailerPopup from '../TrailerPopup/TrailerPopup';
 import './SavedMovies.css';
 
-function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDeleteSavedMovie, hendleFoundSavedMovie, hendleFindShort, getSavedMovies, hendleSetMainMapLoading, isMainMapLoading }) {
 
-    /*const [isMainMapLoading, setIsMainMapLoading] = useState(false)*/
+function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDeleteSavedMovie, hendleFoundSavedMovie, hendleFindShort, getSavedMovies, hendleSetMainMapLoading, isMainMapLoading, savedMapForSearch }) {
+
     const [isLoadingSavedMovies, setIsLoadingSavedMovies] = useState(true)
     const [isDeleteMoviesPopupOpen, setIsDeleteMoviesPopupOpen] = useState(false);
     const [isTrailerPopupOpen, setIsTrailerPopupOpen] = useState(false);
 
-    useEffect(() => {
+   useEffect(() => {
         getSavedMovies()
-     
-        /*if (JSON.parse(localStorage.getItem('selectedShortMovie')) === true)
-        hendleFoundSavedMovie(mainSavedMap.filter(m => m.duration < 40))*/
     }, [])
-
 
     const hendleDeleteMoviesPopupOpen = () => {
         setIsDeleteMoviesPopupOpen(true)
@@ -38,13 +34,11 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDe
         setIsTrailerPopupOpen(false)
     }
 
-    function hendleFindMovies(movieName, isShortFilm) {
+    async function hendleFindMovies(movieName, isShortFilm) {
         setIsLoadingSavedMovies(false)
-
-        const foundMap = findMovies(movieName, isShortFilm, mainSavedMap)
+        const foundMap = findMovies(movieName, isShortFilm, savedMapForSearch)
         if (foundMap.length === 0) {
             hendleSetMainMapLoading(true)
-            /*setIsMainMapLoading(true)*/
             hendleFoundSavedMovie(foundMap)
             setIsLoadingSavedMovies(true)
         }
@@ -52,7 +46,6 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDe
             hendleFoundSavedMovie(foundMap)
             setIsLoadingSavedMovies(true)
             hendleSetMainMapLoading(false)
-            /*setIsMainMapLoading(false)*/
         }
     }
 
@@ -84,7 +77,9 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDe
                     /*setOldSearch={setOldSearch}*/
                     isSavedList={true}
                     map={mainSavedMap}
-                    hendleFindShort={hendleFindShort} />
+                    hendleFindShort={hendleFindShort}
+                    getSavedMovies={getSavedMovies}
+                />
                 {isLoadingSavedMovies ?
                     <MoviesCardList
                         isSavedList={true}

@@ -1,12 +1,12 @@
 
-const findMoviesByName = (movieName, moviesMap) => {
+export const findMoviesByName = (movieName, moviesMap) => {
     return moviesMap.filter((m) => {
         if (m.nameRU.toLowerCase().includes(movieName.toLowerCase()) || m.nameEN.toLowerCase().includes(movieName.toLowerCase()))
             return m
     })
 }
 
-const findMoviesByNameyAndDuration = (movieName, moviesMap) => {
+export const findMoviesByNameyAndDuration = (movieName, moviesMap) => {
     return moviesMap.filter((m) => {
         if (m.nameRU.toLowerCase().includes(movieName.toLowerCase()) && m.duration < 40 ||
             m.nameEN.toLowerCase().includes(movieName.toLowerCase()) && m.duration < 40)
@@ -24,3 +24,5 @@ export const findMovies = (fileName, isShortFilm, allMoviesMap) => {
         return findMoviesByName(fileName, allMoviesMap)
     }
 }
+
+

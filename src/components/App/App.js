@@ -20,7 +20,7 @@ import { TOO_MANY_REQUESTS, SUCCESS_REGISTRATION, SUCCESS_EDIT_USER, NOT_AUTH, N
 import { useLocation } from "react-router-dom";
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import TrailerPopup from '../TrailerPopup/TrailerPopup';
-
+import { findMoviesByNameyAndDuration, findMoviesByName } from '../../utils/Movies'
 
 function App() {
 
@@ -109,7 +109,6 @@ function App() {
           console.log(err)
         })
     }
-
   }, [loggenIn])
 
   useEffect(() => {
@@ -137,6 +136,7 @@ function App() {
 
   /*массив с сохраненными фильмами*/
   const [mainSavedMap, setMainSavedMap] = useState([])
+  const [savedMapForSearch, setSavedMapForSearch] = useState([])
 
   /*переключение лайков */
   const toggeMovie = (param, movie) => {
@@ -163,7 +163,7 @@ function App() {
           localStorage.setItem('selectedMoviesMap', JSON.stringify(localStorageWhithLike.map(m => m.ownerID === id ? m = Object.assign(m, { ownerID: null }) : m)));
         }
         if (JSON.parse(localStorage.getItem('selectedShortMovie') === true))
-          setMainSavedMap(mainSavedMap.filter(m => m._id !== id && m.duration < 40))
+          setMainSavedMap(mainSavedMap.filter(m => m._id !== id && m.duration <= 40))
         else
           setMainSavedMap(mainSavedMap.filter(m => m._id !== id))
       })
@@ -174,15 +174,17 @@ function App() {
       })
   }
 
-  const getSavedMovies = (() => {
+  async function getSavedMovies() {
     if (loggenIn) {
-      mainApi.getMovies()
+      await mainApi.getMovies()
         .then((movies) => {
           if (movies) {
             setMainSavedMap(movies.data)
+            setSavedMapForSearch(movies.data)
           }
           else {
             setMainSavedMap([])
+            
           }
         })
         .catch((e) => {
@@ -191,7 +193,7 @@ function App() {
           setIsErrorRegPopupOpen(true)
         })
     }
-  })
+  }
 
   useEffect(() => {
     getSavedMovies()
@@ -204,18 +206,27 @@ function App() {
     setIsMainMapLoading(param)
   }
 
-  const heandleFoundShortSavedMovie = (short) => {
+  const heandleFoundShortSavedMovie = (short, val) => {
+    const shortMovies = findMoviesByNameyAndDuration(val, savedMapForSearch)
+    const movies = findMoviesByName(val, savedMapForSearch)
     if (short === true) {
-      const shortMovies = mainSavedMap.filter(m => m.duration < 40)
-      if (shortMovies.length === 0) setIsMainMapLoading(true)
+      if (shortMovies.length === 0)
+        setIsMainMapLoading(true)
       else {
-        setMainSavedMap(mainSavedMap.filter(m => m.duration < 40))
+        setMainSavedMap(shortMovies)
         setIsMainMapLoading(false)
       }
     }
     else {
-      getSavedMovies()
-      setIsMainMapLoading(false)
+      if (val === '') setMainSavedMap(savedMapForSearch)
+      else {
+        if (movies.length === 0)
+          setIsMainMapLoading(true)
+        else {
+          setMainSavedMap(movies)
+          setIsMainMapLoading(false)
+        }
+      }
     }
   }
   /*отрисовка найденых сохраннных фильмов*/
@@ -370,6 +381,7 @@ function App() {
             getSavedMovies={getSavedMovies}
             hendleSetMainMapLoading={hendleSetMainMapLoading}
             isMainMapLoading={isMainMapLoading}
+            savedMapForSearch={savedMapForSearch}
           />} />
           <Route path="/profile" element={<ProtectedRouteElement
             element={Profile}
@@ -380,7 +392,8 @@ function App() {
             heandleRemoveCurrentUser={heandleRemoveCurrentUser}
             isLoading={isLoading}
             errorMessage={errorMessage}
-            hendleResetErrorMessage={hendleResetErrorMessage} />} />
+            hendleResetErrorMessage={hendleResetErrorMessage}
+            hendleFoundSavedMovie={hendleFoundSavedMovie} />} />
           <Route path="/signin" element={<Login
             loginUser={loginUser}
             isLoading={isLoading}

@@ -3,7 +3,7 @@ import find from '../../images/find.svg';
 import find_grey from '../../images/find_grey.svg';
 import { useEffect, useState } from 'react';
 
-function SearchForm({ hendleFindMovies, isSavedList, hendleFindShort }) {
+function SearchForm({ hendleFindMovies, isSavedList, hendleFindShort, map, getSavedMovies }) {
 
     const [formValue, setFormValue] = useState('')
     const [formCheckbox, setFormCheckbox] = useState(false)
@@ -63,7 +63,8 @@ function SearchForm({ hendleFindMovies, isSavedList, hendleFindShort }) {
         else localStorage.setItem('selectedShortMovie', JSON.stringify(checked))
         setFormCheckbox(checked);
         if (isSavedList) {
-            hendleFindShort(checked)
+            if(map.length!==0)
+            hendleFindShort(checked, formValue)
         }
         else {
             if (localStorage.getItem('selectedMoviesMap') !== null)

@@ -9,7 +9,7 @@ import validator from "validator";
 
 function Profile({ navigateForPage, handleNotLogin, editUser,
     heandleRemoveCurrentUser, isLoading,
-    errorMessage, hendleResetErrorMessage }) {
+    errorMessage, hendleResetErrorMessage, hendleFoundSavedMovie }) {
     useEffect(() => {
         hendleResetErrorMessage()
     }, [])
@@ -142,6 +142,7 @@ function Profile({ navigateForPage, handleNotLogin, editUser,
         handleNotLogin();
         heandleRemoveCurrentUser();
         navigateForPage('/');
+        hendleFoundSavedMovie([])
     }
 
     const handleSubmit = (e) => {

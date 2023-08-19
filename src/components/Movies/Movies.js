@@ -25,15 +25,8 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
                         movies.forEach((mov) => {
                             mov.ownerID = null
                         })
-                        if (movies.length !== 0 && mainSavedMap.length !== 0) {
-                            movies.forEach((mov) => {
-                                mainSavedMap.forEach((sevedMov) => {
-                                    if (sevedMov.nameRU === mov.nameRU) mov.ownerID = sevedMov._id
-                                })
-                            })
-                        }
                         localStorage.setItem("beatFilmMovies", JSON.stringify(movies))
-                    }
+                }
                 })
                 .catch((e) => {
                     console.log(e)
@@ -42,8 +35,25 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
         }
     }, [])
 
+  useEffect(()=>{
+    setIsMoviesLoading(false)
+       const beatFilmMovies = JSON.parse(localStorage.getItem("beatFilmMovies"))
+        if (mainSavedMap.length !== 0) {
+            beatFilmMovies.forEach((mov) => {
+                mov.ownerID = null
+                mainSavedMap.forEach((sevedMov) => {
+                    if (sevedMov.nameRU === mov.nameRU) mov.ownerID = sevedMov._id
+                })
+            })
+            localStorage.removeItem("beatFilmMovies")
+            localStorage.setItem("beatFilmMovies", JSON.stringify(beatFilmMovies))
+        }
+        setIsMoviesLoading(true)
+    },[])
+
     /*карточки из localstorage*/
     useEffect(() => {
+        setIsMoviesLoading(false)
         if (localStorage.getItem('selectedMovie')
             && localStorage.getItem('selectedMoviesMap')) {
             const searchMovies = JSON.parse(localStorage.getItem('selectedMoviesMap'));
@@ -63,6 +73,7 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
         else {
             setMainMap([])
         }
+        setIsMoviesLoading(true)
     }, [])
 
     /*поиск фильма*/
@@ -99,7 +110,7 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
         await mainApi.deleteMovies(movie.ownerID)
             .then((deleteMovie) => {
                 if (JSON.parse(localStorage.getItem('selectedShortMovie')) === true) {
-                    setMainMap(toggeMovie(null, movie).filter(m => m.duration < 40))
+                    setMainMap(toggeMovie(null, movie).filter(m => m.duration <= 40))
                 }
                 else
                     setMainMap(toggeMovie(null, movie))
@@ -116,10 +127,10 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
         setIsMoviesLoading(false)
         const filterMovies = JSON.parse(localStorage.getItem('selectedMoviesMap'))
         if (short) {
-            const map = filterMovies.filter(m => m.duration < 40)
+            const map = filterMovies.filter(m => m.duration <= 40)
             if (map.length === 0)
                 setIsMainMapLoading(true)
-            else setMainMap(filterMovies.filter(m => m.duration < 40))
+            else setMainMap(filterMovies.filter(m => m.duration <= 40))
         }
         else {
             setMainMap(filterMovies)
@@ -132,9 +143,9 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
     async function hendleSaveMovies(movie) {
         await mainApi.saveMovies({ item: movie })
             .then((savedMovie) => {
-                console.log(JSON.parse(localStorage.getItem('selectedShortMovie')))
+               
                 if (JSON.parse(localStorage.getItem('selectedShortMovie')) === true) {
-                    setMainMap(toggeMovie(savedMovie._id, movie).filter(m => m.duration < 40))
+                    setMainMap(toggeMovie(savedMovie._id, movie).filter(m => m.duration <= 40))
                 }
                 else setMainMap(toggeMovie(savedMovie._id, movie))
             })
