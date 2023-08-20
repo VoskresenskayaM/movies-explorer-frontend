@@ -57,7 +57,6 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
         if (localStorage.getItem('selectedMovie')
             && localStorage.getItem('selectedMoviesMap')) {
             const searchMovies = JSON.parse(localStorage.getItem('selectedMoviesMap'));
-
             if (JSON.parse(localStorage.getItem('selectedShortMovie')) === true) {
                 const shortMovies = searchMovies.filter(m => m.duration < 40)
                 if (shortMovies.length === 0) {

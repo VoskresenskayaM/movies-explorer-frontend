@@ -140,9 +140,9 @@ function App() {
 
   /*переключение лайков */
   const toggeMovie = (param, movie) => {
-    const mainWhithLike = JSON.parse(localStorage.getItem('beatFilmMovies')).map(m => m.id === movie.id ? m = Object.assign(m, { ownerID: param }) : m)
+    /*const mainWhithLike = JSON.parse(localStorage.getItem('beatFilmMovies')).map(m => m.id === movie.id ? m = Object.assign(m, { ownerID: param }) : m)
     localStorage.removeItem('beatFilmMovies');
-    localStorage.setItem('beatFilmMovies', JSON.stringify(mainWhithLike));
+    localStorage.setItem('beatFilmMovies', JSON.stringify(mainWhithLike));*/
     const localStorageWhithLike = JSON.parse(localStorage.getItem('selectedMoviesMap')).map(m => m.id === movie.id ? m = Object.assign(m, { ownerID: param }) : m)
     localStorage.removeItem('selectedMoviesMap');
     localStorage.setItem('selectedMoviesMap', JSON.stringify(localStorageWhithLike));
@@ -155,9 +155,9 @@ function App() {
     await mainApi.deleteMovies(id)
       .then((deleteMovie) => {
         if (deleteMovie) {
-          const mainWhithLike = JSON.parse(localStorage.getItem('beatFilmMovies')).map(m => m.ownerID === id ? m = Object.assign(m, { ownerID: null }) : m)
+          /*const mainWhithLike = JSON.parse(localStorage.getItem('beatFilmMovies')).map(m => m.ownerID === id ? m = Object.assign(m, { ownerID: null }) : m)
           localStorage.removeItem('beatFilmMovies');
-          localStorage.setItem('beatFilmMovies', JSON.stringify(mainWhithLike));
+          localStorage.setItem('beatFilmMovies', JSON.stringify(mainWhithLike));*/
           const localStorageWhithLike = JSON.parse(localStorage.getItem('selectedMoviesMap'))
           localStorage.removeItem('selectedMoviesMap');
           localStorage.setItem('selectedMoviesMap', JSON.stringify(localStorageWhithLike.map(m => m.ownerID === id ? m = Object.assign(m, { ownerID: null }) : m)));
@@ -184,7 +184,7 @@ function App() {
           }
           else {
             setMainSavedMap([])
-            
+
           }
         })
         .catch((e) => {
@@ -218,7 +218,10 @@ function App() {
       }
     }
     else {
-      if (val === '') setMainSavedMap(savedMapForSearch)
+      if (val === '') {
+        getSavedMovies()
+        setIsMainMapLoading(false)
+      }
       else {
         if (movies.length === 0)
           setIsMainMapLoading(true)
