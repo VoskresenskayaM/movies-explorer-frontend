@@ -1,4 +1,5 @@
 export const SERVER_MOVIES_URL= 'https://api.nomoreparties.co';
+/*export const SERVER_MAIN_URL = 'http://localhost:3001'*/
 export const SERVER_MAIN_URL = 'https://api.vmm459.movies.nomoreparties.sbs';
 
 export const TOO_MANY_REQUESTS = 'Превышено количество запросов на сервер. Повторите позже';

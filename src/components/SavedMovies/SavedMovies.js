@@ -8,8 +8,8 @@ import { findMovies } from '../../utils/Movies';
 import TrailerPopup from '../TrailerPopup/TrailerPopup';
 import './SavedMovies.css';
 
-
-function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDeleteSavedMovie, hendleFoundSavedMovie, hendleFindShort, getSavedMovies, hendleSetMainMapLoading, isMainMapLoading, savedMapForSearch }) {
+function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDeleteSavedMovie, hendleFoundSavedMovie,  getSavedMovies,
+     hendleSetMainMapLoading, isMainMapLoading,  hendleSetErrorInErrorRegPopup, hendleErrorRegPopupOpen }) {
 
     const [isLoadingSavedMovies, setIsLoadingSavedMovies] = useState(true)
     const [isDeleteMoviesPopupOpen, setIsDeleteMoviesPopupOpen] = useState(false);
@@ -17,6 +17,7 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDe
 
    useEffect(() => {
         getSavedMovies()
+        hendleSetMainMapLoading(false)
     }, [])
 
     const hendleDeleteMoviesPopupOpen = () => {
@@ -36,6 +37,7 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDe
 
     async function hendleFindMovies(movieName, isShortFilm) {
         setIsLoadingSavedMovies(false)
+        const savedMapForSearch = JSON.parse(localStorage.getItem('savedMoviesMap'))
         const foundMap = findMovies(movieName, isShortFilm, savedMapForSearch)
         if (foundMap.length === 0) {
             hendleSetMainMapLoading(true)
@@ -57,6 +59,7 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDe
         setIsLoadingSavedMovies(true);
     }
 
+
     return (
         <>
             <DeleteMoviesPopup
@@ -74,11 +77,11 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDe
             <main className='savedMovies'>
                 <SearchForm
                     hendleFindMovies={hendleFindMovies}
-                    /*setOldSearch={setOldSearch}*/
                     isSavedList={true}
                     map={mainSavedMap}
-                    hendleFindShort={hendleFindShort}
                     getSavedMovies={getSavedMovies}
+                    hendleSetErrorInErrorRegPopup={hendleSetErrorInErrorRegPopup}
+                    hendleErrorRegPopupOpen={hendleErrorRegPopupOpen}
                 />
                 {isLoadingSavedMovies ?
                     <MoviesCardList
@@ -88,6 +91,7 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDe
                         hendleSelectMovies={hendleSelectMovies}
                         isMainMapLoading={isMainMapLoading}
                         hendleTrailerPopupOpen={hendleTrailerPopupOpen}
+                        
                     />
                     : <Preloader />}
             </main>

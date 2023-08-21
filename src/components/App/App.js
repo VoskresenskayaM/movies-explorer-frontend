@@ -89,8 +89,7 @@ function App() {
   }
 
   /*проверка токена*/
-  const checkToken = useCallback(() => {
-
+  useEffect(() => {
     if (localStorage.getItem('token')) {
       const token = localStorage.getItem('token')
       getCurrentUser(token)
@@ -111,9 +110,7 @@ function App() {
     }
   }, [loggenIn])
 
-  useEffect(() => {
-    checkToken()
-  }, [checkToken])
+
 
   /*уcтановка текущего пользователя*/
   const setUser = useCallback(() => {
@@ -136,17 +133,13 @@ function App() {
 
   /*массив с сохраненными фильмами*/
   const [mainSavedMap, setMainSavedMap] = useState([])
-  const [savedMapForSearch, setSavedMapForSearch] = useState([])
+
 
   /*переключение лайков */
   const toggeMovie = (param, movie) => {
-    /*const mainWhithLike = JSON.parse(localStorage.getItem('beatFilmMovies')).map(m => m.id === movie.id ? m = Object.assign(m, { ownerID: param }) : m)
-    localStorage.removeItem('beatFilmMovies');
-    localStorage.setItem('beatFilmMovies', JSON.stringify(mainWhithLike));*/
     const localStorageWhithLike = JSON.parse(localStorage.getItem('selectedMoviesMap')).map(m => m.id === movie.id ? m = Object.assign(m, { ownerID: param }) : m)
     localStorage.removeItem('selectedMoviesMap');
     localStorage.setItem('selectedMoviesMap', JSON.stringify(localStorageWhithLike));
-    getSavedMovies()
     return localStorageWhithLike
   }
 
@@ -155,13 +148,19 @@ function App() {
     await mainApi.deleteMovies(id)
       .then((deleteMovie) => {
         if (deleteMovie) {
-          /*const mainWhithLike = JSON.parse(localStorage.getItem('beatFilmMovies')).map(m => m.ownerID === id ? m = Object.assign(m, { ownerID: null }) : m)
-          localStorage.removeItem('beatFilmMovies');
-          localStorage.setItem('beatFilmMovies', JSON.stringify(mainWhithLike));*/
-          const localStorageWhithLike = JSON.parse(localStorage.getItem('selectedMoviesMap'))
-          localStorage.removeItem('selectedMoviesMap');
-          localStorage.setItem('selectedMoviesMap', JSON.stringify(localStorageWhithLike.map(m => m.ownerID === id ? m = Object.assign(m, { ownerID: null }) : m)));
+          if (localStorage.getItem('selectedMoviesMap') !== null) {
+            const localStorageWhithLike = JSON.parse(localStorage.getItem('selectedMoviesMap'))
+            localStorage.removeItem('selectedMoviesMap');
+            localStorage.setItem('selectedMoviesMap', JSON.stringify(localStorageWhithLike.map(m => m.ownerID === id ? m = Object.assign(m, { ownerID: null }) : m)));
+          }
+          console.log(JSON.parse(localStorage.getItem('savedMoviesMap')))
+          if (localStorage.getItem('savedMoviesMap')!==null) {
+            const savedMoviesMap = JSON.parse(localStorage.getItem('savedMoviesMap'))
+            localStorage.removeItem('savedMoviesMap');
+            localStorage.setItem('savedMoviesMap', JSON.stringify(savedMoviesMap.filter(m => m._id !== id)))
+          }
         }
+
         if (JSON.parse(localStorage.getItem('selectedShortMovie') === true))
           setMainSavedMap(mainSavedMap.filter(m => m._id !== id && m.duration <= 40))
         else
@@ -180,7 +179,12 @@ function App() {
         .then((movies) => {
           if (movies) {
             setMainSavedMap(movies.data)
-            setSavedMapForSearch(movies.data)
+            if (localStorage.getItem('savedMoviesMap')!==null) {
+              localStorage.removeItem('savedMoviesMap');
+              localStorage.setItem('savedMoviesMap', JSON.stringify(movies.data));
+            }
+            else
+              localStorage.setItem('savedMoviesMap', JSON.stringify(movies.data));
           }
           else {
             setMainSavedMap([])
@@ -197,7 +201,7 @@ function App() {
 
   useEffect(() => {
     getSavedMovies()
-  }, [loggenIn])
+  }, [loggenIn ])
 
   /*фильтр короткометражек для сохраненных фильмов */
   const [isMainMapLoading, setIsMainMapLoading] = useState(false)
@@ -206,32 +210,7 @@ function App() {
     setIsMainMapLoading(param)
   }
 
-  const heandleFoundShortSavedMovie = (short, val) => {
-    const shortMovies = findMoviesByNameyAndDuration(val, savedMapForSearch)
-    const movies = findMoviesByName(val, savedMapForSearch)
-    if (short === true) {
-      if (shortMovies.length === 0)
-        setIsMainMapLoading(true)
-      else {
-        setMainSavedMap(shortMovies)
-        setIsMainMapLoading(false)
-      }
-    }
-    else {
-      if (val === '') {
-        getSavedMovies()
-        setIsMainMapLoading(false)
-      }
-      else {
-        if (movies.length === 0)
-          setIsMainMapLoading(true)
-        else {
-          setMainSavedMap(movies)
-          setIsMainMapLoading(false)
-        }
-      }
-    }
-  }
+  
   /*отрисовка найденых сохраннных фильмов*/
   const hendleFoundSavedMovie = (map) => {
     setMainSavedMap(map)
@@ -331,29 +310,10 @@ function App() {
   return (
     <div className="app">
       <CurrentUserContext.Provider value={currentUser}>
-        <NavTabPopup
-          isPopupOpen={isPopupOpen}
-          hendlePopupClose={hendlePopupClose}
-        />
-        <SuccessRegPopup
-          isPopupOpen={isSuccessRegPopupOpen}
-          hendlePopupClose={hendleSuccessRegPopupClose}
-          successMessage={successMessage}
-        />
-        <ErrorRegPopup
-          isPopupOpen={isErrorsRegPopupOpen}
-          hendlePopupClose={hendleErrorRegPopupClose}
-          errorMessage={errorMessage} />
         <Header
           hendlePopupOpen={hendlePopupOpen}
           loggenIn={loggenIn}
         />
-        <TrailerPopup
-          isPopupOpen={isTrailerPopupOpen}
-          hendlePopupClose={hendleTrailerPopupClose}
-          selectedMovie={selectedMovie}
-        />
-
         <Routes>
           <Route path="/" element={<Main
           />} />
@@ -379,12 +339,12 @@ function App() {
             selectedMovie={selectedMovie}
             hendleSelectMovies={hendleSelectMovies}
             hendleDeleteSavedMovie={hendleDeleteSavedMovie}
-            hendleFindShort={heandleFoundShortSavedMovie}
             hendleFoundSavedMovie={hendleFoundSavedMovie}
             getSavedMovies={getSavedMovies}
             hendleSetMainMapLoading={hendleSetMainMapLoading}
             isMainMapLoading={isMainMapLoading}
-            savedMapForSearch={savedMapForSearch}
+            hendleSetErrorInErrorRegPopup={hendleSetErrorInErrorRegPopup}
+            hendleErrorRegPopupOpen={hendleErrorRegPopupOpen}
           />} />
           <Route path="/profile" element={<ProtectedRouteElement
             element={Profile}
@@ -409,9 +369,28 @@ function App() {
             errorMessage={errorMessage}
             hendleResetErrorMessage={hendleResetErrorMessage}
           />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<NotFound
+          loggenIn={loggenIn} />} />
 
         </Routes>
+        <NavTabPopup
+          isPopupOpen={isPopupOpen}
+          hendlePopupClose={hendlePopupClose}
+        />
+        <SuccessRegPopup
+          isPopupOpen={isSuccessRegPopupOpen}
+          hendlePopupClose={hendleSuccessRegPopupClose}
+          successMessage={successMessage}
+        />
+        <ErrorRegPopup
+          isPopupOpen={isErrorsRegPopupOpen}
+          hendlePopupClose={hendleErrorRegPopupClose}
+          errorMessage={errorMessage} />
+        <TrailerPopup
+          isPopupOpen={isTrailerPopupOpen}
+          hendlePopupClose={hendleTrailerPopupClose}
+          selectedMovie={selectedMovie}
+        />
       </CurrentUserContext.Provider>
     </div>
   );

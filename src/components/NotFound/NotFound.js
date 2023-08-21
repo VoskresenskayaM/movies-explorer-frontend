@@ -3,11 +3,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NotFound.css';
 
-function NotFound() {
-    const navigate = useNavigate();
+function NotFound({loggenIn}) {
 
+    const navigate = useNavigate();
+//разобраться с перерендером не вышло пока, время ограничено, пока так решила сделать)
     const hendleBack=()=>{
-       navigate(-1)
+      !loggenIn? navigate(-1): navigate(-3)
     }
     return (
         <main>

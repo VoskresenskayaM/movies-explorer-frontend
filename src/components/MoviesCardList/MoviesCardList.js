@@ -7,7 +7,7 @@ import {LAPTOP, PLANSHET, LAPTOP_COUNT_CARD, PLANSHET_COUNT_CARD, MOBULE_COUNT_C
 
 
 function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
-    hendleSaveMovies, isMainMapLoading, hendleSelectMovies, hendleTrailerPopupOpen, isSavedMovie }) {
+    hendleSaveMovies, isMainMapLoading, hendleSelectMovies, hendleTrailerPopupOpen, isSavedMovie, hendleSetMainMapLoading }) {
 
     const [mapForPage, setmapForPage] = useState([]);
     const [currentPage, setCurretPage] = useState(1);
@@ -89,7 +89,8 @@ function MoviesCardList({ isSavedList, map, hendlePopupOpen, hendleDeleteMovies,
 
     return (
         <section className='moviesCardList'>
-            {isMainMapLoading ? <NotFoundMap /> :
+            {isMainMapLoading ? <NotFoundMap 
+            isSavedList={isSavedList}/> :
                 <>
                     <ul className='moviesCardList__list'>
                         {mapForPage.map((el) => (

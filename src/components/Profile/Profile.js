@@ -151,10 +151,10 @@ function Profile({ navigateForPage, handleNotLogin, editUser,
         editUser({ item: formValue })
     }
 
-    const profileButton = `profile__form-button  ${!isFormValidProfile ? 'profile__form-button_inactive' : ''}`;
-    const profileInputErrorName = isValidInputs.nameIsVAlid ? 'profile__form-input-error' :
+    const profileButton = `profile__form-button  ${isRequest ? 'profile__form-button_inactive' : ''}`;
+    const profileInputErrorName = isValidInputs.nameIsValid ? 'profile__form-input-error' :
         'profile__form-input-error profile__form-input-error_active';
-    const profileInputErrorEmail = isValidInputs.emailIsVAlid ? 'profile__form-input-error' :
+    const profileInputErrorEmail = isValidInputs.emailIsValid ? 'profile__form-input-error' :
         'profile__form-input-error profile__form-input-error_active';
     const profileExit = isRequest ? 'profile__exit  profile__exit_inactiv' :
         'profile__exit ';
@@ -175,7 +175,7 @@ function Profile({ navigateForPage, handleNotLogin, editUser,
                                 required
                                 autoComplete="off"
                                 onChange={handleChange}
-                                disabled={!isLoading} />
+                                disabled={!isRequest} />
                         </div>
                         <span className={profileInputErrorName}>{errors.nameError}</span>
                     </div>
@@ -190,7 +190,7 @@ function Profile({ navigateForPage, handleNotLogin, editUser,
                                 required
                                 autoComplete="off"
                                 onChange={handleChange}
-                                disabled={!isLoading} />
+                                disabled={!isRequest} />
                         </div>
                         <span className={profileInputErrorEmail}>{errors.emailError}</span>
                     </div>
@@ -205,7 +205,7 @@ function Profile({ navigateForPage, handleNotLogin, editUser,
                                 handleSubmit={handleSubmit}
 
                             /></>
-                        : <button type='submit' className={profileButton} disabled={!isFormValidProfile}>Редактировать</button >}
+                        : <button type='submit' className={profileButton} disabled={isRequest} onClick={()=>setIsRequest(true)}>Редактировать</button >}
                 </form>
                 <div className='profile__link-block'>
                     <Link to="/" className={profileExit} onClick={signOut}>Выйти из аккаунта</Link >
