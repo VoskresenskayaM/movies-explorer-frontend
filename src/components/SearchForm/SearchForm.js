@@ -23,12 +23,12 @@ function SearchForm({ hendleFindMovies, isSavedList, hendleSetErrorInErrorRegPop
                 setFormCheckbox(short)
             }
         }
-        else {
+      /*  else {
             if (localStorage.getItem('selectedShortSavedMovie') !== null) {
                 const short = JSON.parse(localStorage.getItem('selectedShortSavedMovie'))
                 setFormCheckbox(short)
             }
-        }
+        }*/
     }, [])
 
     const handleChange = (e) => {
