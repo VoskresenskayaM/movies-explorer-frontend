@@ -4,8 +4,6 @@ import ErrorMessageFromForm from '../ErrorMessageFromForm/ErrorMessageFromForm';
 
 function RegForm({ buttonValue, children, hendlePopupOpen, handleSubmit, isFormValid, errorMessage}) {
 
-    const isFormValidButton = errorMessage === '' ? isFormValid : false
-
     return (
         <form onSubmit={handleSubmit} className='regForm' noValidate>
             <fieldset className='regForm__block'>
@@ -16,7 +14,7 @@ function RegForm({ buttonValue, children, hendlePopupOpen, handleSubmit, isFormV
             />
             <SubmitButton
                 buttonValue={buttonValue}
-                isFormValid={isFormValidButton}
+                isFormValid={isFormValid}
                 hendlePopupOpen={hendlePopupOpen}
                 handleSubmit={handleSubmit}
              

@@ -116,13 +116,7 @@ function Profile({ navigateForPage, handleNotLogin, editUser,
         else setIsFormValid(false)
     }, [isValidInputs, errors, formValue])
 
-    useEffect(() => {
-        if (isFormValidProfile || (isFormValidProfile === false && isFormValid === false))
-            setIsRequest(true)
-        else setIsRequest(false)
-    }, [isFormValid, isFormValidProfile])
-
-
+ 
     useEffect(() => {
         if (formValue.name === user.name && formValue.email === user.email) {
             setIsValidProfile(false)
@@ -151,7 +145,7 @@ function Profile({ navigateForPage, handleNotLogin, editUser,
         editUser({ item: formValue })
     }
 
-    const profileButton = `profile__form-button  ${isRequest ? 'profile__form-button_inactive' : ''}`;
+    const profileButton = `profile__form-button  ${isRequest||isFormValidProfile ? 'profile__form-button_inactive' : ''}`;
     const profileInputErrorName = isValidInputs.nameIsValid ? 'profile__form-input-error' :
         'profile__form-input-error profile__form-input-error_active';
     const profileInputErrorEmail = isValidInputs.emailIsValid ? 'profile__form-input-error' :

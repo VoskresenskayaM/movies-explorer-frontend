@@ -20,7 +20,6 @@ import { TOO_MANY_REQUESTS, SUCCESS_REGISTRATION, SUCCESS_EDIT_USER, NOT_AUTH, N
 import { useLocation } from "react-router-dom";
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import TrailerPopup from '../TrailerPopup/TrailerPopup';
-import { findMoviesByNameyAndDuration, findMoviesByName } from '../../utils/Movies'
 
 function App() {
 
@@ -110,8 +109,6 @@ function App() {
     }
   }, [loggenIn])
 
-
-
   /*уcтановка текущего пользователя*/
   const setUser = useCallback(() => {
     mainApi
@@ -133,7 +130,11 @@ function App() {
 
   /*массив с сохраненными фильмами*/
   const [mainSavedMap, setMainSavedMap] = useState([])
+  const [mainMapForSearch, setMainMapForSearch] = useState([])
 
+  const setInMainMapForSearch=(map)=>{
+    setMainMapForSearch(map)
+  }
 
   /*переключение лайков */
   const toggeMovie = (param, movie) => {
@@ -165,6 +166,7 @@ function App() {
           setMainSavedMap(mainSavedMap.filter(m => m._id !== id && m.duration <= 40))
         else
           setMainSavedMap(mainSavedMap.filter(m => m._id !== id))
+          setMainMapForSearch(mainMapForSearch.filter(m => m._id !== id))
       })
       .catch((err) => {
         console.log(err)
@@ -173,22 +175,17 @@ function App() {
       })
   }
 
-  async function getSavedMovies() {
+  useEffect (()=> {
     if (loggenIn) {
-      await mainApi.getMovies()
+      mainApi.getMovies()
         .then((movies) => {
           if (movies) {
             setMainSavedMap(movies.data)
-            if (localStorage.getItem('savedMoviesMap')!==null) {
-              localStorage.removeItem('savedMoviesMap');
-              localStorage.setItem('savedMoviesMap', JSON.stringify(movies.data));
-            }
-            else
-              localStorage.setItem('savedMoviesMap', JSON.stringify(movies.data));
+            setMainMapForSearch(movies.data)
           }
           else {
             setMainSavedMap([])
-
+            setMainMapForSearch([])
           }
         })
         .catch((e) => {
@@ -197,11 +194,7 @@ function App() {
           setIsErrorRegPopupOpen(true)
         })
     }
-  }
-
-  useEffect(() => {
-    getSavedMovies()
-  }, [loggenIn ])
+  },[loggenIn])
 
   /*фильтр короткометражек для сохраненных фильмов */
   const [isMainMapLoading, setIsMainMapLoading] = useState(false)
@@ -209,7 +202,6 @@ function App() {
   const hendleSetMainMapLoading = (param) => {
     setIsMainMapLoading(param)
   }
-
   
   /*отрисовка найденых сохраннных фильмов*/
   const hendleFoundSavedMovie = (map) => {
@@ -329,6 +321,9 @@ function App() {
             selectedMovie={selectedMovie}
             toggeMovie={toggeMovie}
             hendleDeleteSavedMovie={hendleDeleteSavedMovie}
+            hendleFoundSavedMovie={hendleFoundSavedMovie}
+            setInMainMapForSearch={setInMainMapForSearch}
+            mainMapForSearch={mainMapForSearch}
           />} />
           <Route path="/saved-movies" element={<ProtectedRouteElement
             element={SavedMovies}
@@ -340,11 +335,11 @@ function App() {
             hendleSelectMovies={hendleSelectMovies}
             hendleDeleteSavedMovie={hendleDeleteSavedMovie}
             hendleFoundSavedMovie={hendleFoundSavedMovie}
-            getSavedMovies={getSavedMovies}
             hendleSetMainMapLoading={hendleSetMainMapLoading}
             isMainMapLoading={isMainMapLoading}
             hendleSetErrorInErrorRegPopup={hendleSetErrorInErrorRegPopup}
             hendleErrorRegPopupOpen={hendleErrorRegPopupOpen}
+            mainMapForSearch={mainMapForSearch}
           />} />
           <Route path="/profile" element={<ProtectedRouteElement
             element={Profile}

@@ -9,14 +9,14 @@ import TrailerPopup from '../TrailerPopup/TrailerPopup';
 import './SavedMovies.css';
 
 function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDeleteSavedMovie, hendleFoundSavedMovie,  getSavedMovies,
-     hendleSetMainMapLoading, isMainMapLoading,  hendleSetErrorInErrorRegPopup, hendleErrorRegPopupOpen }) {
+     hendleSetMainMapLoading, isMainMapLoading,  hendleSetErrorInErrorRegPopup, hendleErrorRegPopupOpen, mainMapForSearch }) {
 
     const [isLoadingSavedMovies, setIsLoadingSavedMovies] = useState(true)
     const [isDeleteMoviesPopupOpen, setIsDeleteMoviesPopupOpen] = useState(false);
     const [isTrailerPopupOpen, setIsTrailerPopupOpen] = useState(false);
 
    useEffect(() => {
-        getSavedMovies()
+       hendleFoundSavedMovie(mainMapForSearch)
         hendleSetMainMapLoading(false)
     }, [])
 
@@ -37,8 +37,7 @@ function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDe
 
     async function hendleFindMovies(movieName, isShortFilm) {
         setIsLoadingSavedMovies(false)
-        const savedMapForSearch = JSON.parse(localStorage.getItem('savedMoviesMap'))
-        const foundMap = findMovies(movieName, isShortFilm, savedMapForSearch)
+        const foundMap = findMovies(movieName, isShortFilm, mainMapForSearch)
         if (foundMap.length === 0) {
             hendleSetMainMapLoading(true)
             hendleFoundSavedMovie(foundMap)

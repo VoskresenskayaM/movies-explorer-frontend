@@ -3,7 +3,7 @@ import find from '../../images/find.svg';
 import find_grey from '../../images/find_grey.svg';
 import { useEffect, useState } from 'react';
 
-function SearchForm({ hendleFindMovies, isSavedList,  hendleSetErrorInErrorRegPopup,
+function SearchForm({ hendleFindMovies, isSavedList, hendleSetErrorInErrorRegPopup,
     hendleErrorRegPopupOpen }) {
 
     const [formValue, setFormValue] = useState('')
@@ -22,7 +22,12 @@ function SearchForm({ hendleFindMovies, isSavedList,  hendleSetErrorInErrorRegPo
                 const short = JSON.parse(localStorage.getItem('selectedShortMovie'))
                 setFormCheckbox(short)
             }
-            
+        }
+        else {
+            if (localStorage.getItem('selectedShortSavedMovie') !== null) {
+                const short = JSON.parse(localStorage.getItem('selectedShortSavedMovie'))
+                setFormCheckbox(short)
+            }
         }
     }, [])
 
@@ -57,23 +62,23 @@ function SearchForm({ hendleFindMovies, isSavedList,  hendleSetErrorInErrorRegPo
 
     const soldCheckbox = (e) => {
         const { checked } = e.target
-        if (localStorage.getItem('selectedShortMovie') !== null) {
-            localStorage.removeItem('selectedShortMovie')
-            localStorage.setItem('selectedShortMovie', JSON.stringify(checked))
+        if (formValue === '' || formValue === null) {
+            hendleSetErrorInErrorRegPopup('Введите запрос в строку поиска')
+            hendleErrorRegPopupOpen()
+            setFormCheckbox(false)
         }
-        else localStorage.setItem('selectedShortMovie', JSON.stringify(checked))
-        setFormCheckbox(checked);
-        if (!isSavedList) {
-            if (formValue === '' || formValue === null) {
-                hendleSetErrorInErrorRegPopup('Введите запрос в строку поиска')
-                hendleErrorRegPopupOpen()
-                setFormCheckbox(false)
+        else {
+            if (!isSavedList) {
+                if (localStorage.getItem('selectedShortMovie') !== null) {
+                    localStorage.removeItem('selectedShortMovie')
+                    localStorage.setItem('selectedShortMovie', JSON.stringify(checked))
+                }
+                else localStorage.setItem('selectedShortMovie', JSON.stringify(checked))
             }
-            else { hendleFindMovies(formValue, !formCheckbox) }
+            hendleFindMovies(formValue, !formCheckbox)
+            setFormCheckbox(checked)
         }
-        else  hendleFindMovies(formValue, !formCheckbox)
-
-    };
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();

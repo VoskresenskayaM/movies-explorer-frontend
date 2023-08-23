@@ -10,8 +10,10 @@ import { ERROR_DELETE_MOVIE, ERROR_SAVE_MOVIE } from '../../utils/Constants';
 import beatFilmApi from '../../utils/MoviesApi';
 
 function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPopupOpen,
-    hendleTrailerPopupOpen, hendleSelectMovies, toggeMovie }) {
+    hendleTrailerPopupOpen, hendleSelectMovies, toggeMovie, hendleFoundSavedMovie, setInMainMapForSearch, mainMapForSearch }) {
 
+
+  
     const [isMoviesLoading, setIsMoviesLoading] = useState(true)
     const [mainMap, setMainMap] = useState([]);//map для отрисовки
     const [isMainMapLoading, setIsMainMapLoading] = useState(false)
@@ -70,10 +72,12 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
             setIsMoviesLoading(true)
         }
         else {
+            if(mainMapForSearch.length!==0){
             foundMap.forEach((mov) => {
-                mov.ownerID = null
                 mainSavedMap.forEach((sevedMov) => {
-                    if (sevedMov.nameRU === mov.nameRU) mov.ownerID = sevedMov._id})})
+                    if (sevedMov.nameRU === mov.nameRU)
+                     mov.ownerID = sevedMov._id
+                    })})}
             setIsMainMapLoading(false)
         }
         if (localStorage.getItem('selectedMoviesMap') !== null && localStorage.getItem('selectedMovie') !== null) {
@@ -92,10 +96,14 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
 
     /*удаление фильма*/
     async function hendleDeleteMovies(movie) {
+       
         await mainApi.deleteMovies(movie.ownerID)
             .then((deleteMovie) => {
+                hendleFoundSavedMovie(mainSavedMap.filter(e=>e._id!==deleteMovie._id))
+                setInMainMapForSearch(mainMapForSearch.filter(m=>m._id!==deleteMovie._id))
                 if (JSON.parse(localStorage.getItem('selectedShortMovie')) === true) {
                     setMainMap(toggeMovie(null, movie).filter(m => m.duration <= 40))
+                 
                 }
                 else
                     setMainMap(toggeMovie(null, movie))
@@ -105,13 +113,15 @@ function Movies({ mainSavedMap, hendleSetErrorInErrorRegPopup, hendleErrorRegPop
                 hendleSetErrorInErrorRegPopup(ERROR_DELETE_MOVIE)
                 hendleErrorRegPopupOpen()
             })
+         
     }
 
     /*сохранение фильма*/
     async function hendleSaveMovies(movie) {
         await mainApi.saveMovies({ item: movie })
             .then((savedMovie) => {
-
+                hendleFoundSavedMovie([...mainSavedMap, savedMovie])
+                setInMainMapForSearch([...mainMapForSearch, savedMovie])
                 if (JSON.parse(localStorage.getItem('selectedShortMovie')) === true) {
                     setMainMap(toggeMovie(savedMovie._id, movie).filter(m => m.duration <= 40))
                 }

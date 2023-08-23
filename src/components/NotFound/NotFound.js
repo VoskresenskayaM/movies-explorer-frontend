@@ -6,7 +6,7 @@ import './NotFound.css';
 function NotFound({loggenIn}) {
 
     const navigate = useNavigate();
-//разобраться с перерендером не вышло пока, время ограничено, пока так решила сделать)
+
     const hendleBack=()=>{
       !loggenIn? navigate(-1): navigate(-3)
     }

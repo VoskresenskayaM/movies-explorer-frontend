@@ -14,7 +14,7 @@ function Login({ loginUser, isLoading, errorMessage, hendleResetErrorMessage}) {
 
     const formFields = ['email', 'password']
     const { isValidInputs, errors, formValue, handleChange, isFormValid } = useFormValidate(...formFields)
-  
+  console.log(isFormValid, formValue)
     const handleSubmit = (e) => {
         e.preventDefault();
         loginUser(formValue.email, formValue.password)
