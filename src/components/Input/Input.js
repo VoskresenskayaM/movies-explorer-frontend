@@ -1,6 +1,6 @@
 import './Input.css';
 
-function Input({ id, lable, type, name, autoComplete, placeholder, error, isValidInput, value }) {
+function Input({ id, lable, type, name, autoComplete, placeholder, error, isValidInput, value, onChange, disabled }) {
     const errorClassName = `input__error ${isValidInput ? '' : 'input__error-active'}`
     const inputClassName = `input__input ${isValidInput ? '' : 'input__input-text-error'}`
     return (
@@ -14,6 +14,8 @@ function Input({ id, lable, type, name, autoComplete, placeholder, error, isVali
                 placeholder={placeholder}
                 value={value}
                 required
+                onChange={onChange}
+                disabled={disabled}
             />
             <span className={errorClassName}>{error}</span>
         </div>

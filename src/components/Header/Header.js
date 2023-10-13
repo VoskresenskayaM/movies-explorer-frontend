@@ -1,67 +1,52 @@
 import { useLocation } from "react-router-dom";
 import RegisterHeader from '../RegisterHeader/RegisterHeader';
 import MoviesHeader from '../MoviesHeader/MoviesHeader';
-import { Link } from 'react-router-dom';
 import './Header.css';
-import Logo from '../Logo/Logo';
+import MainHeader from '../MainHeader/MainHeader';
 
-function Header({ hendlePopupOpen, windowWidth }) {
+function Header({ hendlePopupOpen, loggenIn }) {
+
     let location = useLocation();
 
     switch (location.pathname) {
-
         case '/':
-            return (
-            <header className='header'>
-                <div className='header__conainer'>
-                    <Logo />
-                    <div className='header__block'>
-                        <Link to="/signup" className='header__reg-button'>Регистрация</Link>
-                        <Link to="/signin" className='header__log-button'>Войти</Link>
-                    </div>
-                </div>
-            </header>)
-
+            return (<MainHeader
+                loggenIn={loggenIn}
+                hendlePopupOpen={hendlePopupOpen} />)
         case '/movies':
             return (
                 <MoviesHeader
                     hendlePopupOpen={hendlePopupOpen}
-                    windowWidth={windowWidth} />
+                    loggenIn={loggenIn}  />
             )
-
         case '/saved-movies':
             return (
                 <MoviesHeader
                     hendlePopupOpen={hendlePopupOpen}
-                    windowWidth={windowWidth} />
+                    loggenIn={loggenIn}  />
             )
-
         case '/signin':
             return (<RegisterHeader
-                children='Рады видеть!' />)
-
+                children='Рады видеть!' />
+            )
         case '/signup':
             return (
                 <RegisterHeader
                     children='Добро пожаловать!' />
             )
-
         case '/editprofile':
             return (
                 <RegisterHeader
                     children='Редактирование' />
             )
-
         case '/profile':
             return (
                 <MoviesHeader
                     hendlePopupOpen={hendlePopupOpen}
-                    windowWidth={windowWidth} />
+                    loggenIn={loggenIn}  />
             )
-
         default:
             break
-
     }
 }
 

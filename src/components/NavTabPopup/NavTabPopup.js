@@ -4,7 +4,7 @@ import './NavTabPopup.css';
 import cross from '../../images/cross.svg';
 import Account from '../Account/Account';
 
-function NavTabPopup({ isPopupOpen, hendlePopupClose }) {
+function NavTabPopup({ isPopupOpen, hendlePopupClose  }) {
 
     const navTabClass = `navtabpopup ${isPopupOpen ? 'navtabpopup__opened' : ''}`
     return (

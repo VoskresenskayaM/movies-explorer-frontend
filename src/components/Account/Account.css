@@ -8,6 +8,10 @@
     transition: opacity .5s ease;
 }
 
+.navtabpopup__accoutn_white {
+    color: #ffffff;
+}
+
 .navtabpopup__accoutn:hover {
     opacity: 0.6;
 }

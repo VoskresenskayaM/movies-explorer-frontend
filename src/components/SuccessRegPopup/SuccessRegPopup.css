@@ -1,0 +1,61 @@
+.successregpopup {
+    display: flex;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.7);
+    flex-direction: row;
+    align-items: center;
+}
+
+.successregpopup__opened {
+    visibility: visible;
+    opacity: 1;
+}
+
+.successregpopup__container {
+    background-color: #ffffff;
+    border-radius: 6px;
+    min-width: 300px;
+    min-height: 300px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 2;
+}
+
+.successregpopup__cross {
+    position: absolute;
+    top: 13.44px;
+    right: 13.44px;
+    cursor: pointer;
+    transition: opacity .5s ease;
+}
+
+.successregpopup__cross:hover {
+    opacity: 0.6;
+}
+
+
+.successregpopup__image {
+    min-width: 40px;
+    min-height: 40px;
+    margin-top: 40px;
+}
+
+
+.successregpopup__message {
+    font-size: 16px;
+    font-weight: medium;
+    line-height: 28px;
+    margin: 100px 0 0 0;
+    max-width: 230px;
+    text-align: center;
+}
+

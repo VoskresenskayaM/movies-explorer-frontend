@@ -1,23 +1,102 @@
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
-
+import { useEffect, useState } from 'react';
+import Preloader from '../Preloader/Preloader';
+import DeleteMoviesPopup from '../DeleteMoviesPopup/DeleteMoviesPopup';
+import { findMovies } from '../../utils/Movies';
+import TrailerPopup from '../TrailerPopup/TrailerPopup';
 import './SavedMovies.css';
 
-function SavedMovies({ isSavedList, isMoviesEmpty, hendlePopupOpen, mapForPage }) {
+function SavedMovies({ mainSavedMap, selectedMovie, hendleSelectMovies, hendleDeleteSavedMovie, hendleFoundSavedMovie,  getSavedMovies,
+     hendleSetMainMapLoading, isMainMapLoading,  hendleSetErrorInErrorRegPopup, hendleErrorRegPopupOpen, mainMapForSearch }) {
+
+    const [isLoadingSavedMovies, setIsLoadingSavedMovies] = useState(true)
+    const [isDeleteMoviesPopupOpen, setIsDeleteMoviesPopupOpen] = useState(false);
+    const [isTrailerPopupOpen, setIsTrailerPopupOpen] = useState(false);
+
+   useEffect(() => {
+       hendleFoundSavedMovie(mainMapForSearch)
+        hendleSetMainMapLoading(false)
+    }, [])
+
+    const hendleDeleteMoviesPopupOpen = () => {
+        setIsDeleteMoviesPopupOpen(true)
+    }
+    const hendleDeleteMoviesPopupClose = () => {
+        setIsDeleteMoviesPopupOpen(false)
+    }
+
+    const hendleTrailerPopupOpen = () => {
+        setIsTrailerPopupOpen(true)
+    }
+
+    const hendleTrailerPopupClose = () => {
+        setIsTrailerPopupOpen(false)
+    }
+
+    async function hendleFindMovies(movieName, isShortFilm) {
+        setIsLoadingSavedMovies(false)
+        const foundMap = findMovies(movieName, isShortFilm, mainMapForSearch)
+        if (foundMap.length === 0) {
+            hendleSetMainMapLoading(true)
+            hendleFoundSavedMovie(foundMap)
+            setIsLoadingSavedMovies(true)
+        }
+        else {
+            hendleFoundSavedMovie(foundMap)
+            setIsLoadingSavedMovies(true)
+            hendleSetMainMapLoading(false)
+        }
+    }
+
+    /*удаление фильма*/
+    function hendleDelete() {
+        hendleDeleteMoviesPopupClose()
+        setIsLoadingSavedMovies(false);
+        hendleDeleteSavedMovie(selectedMovie._id)
+        setIsLoadingSavedMovies(true);
+    }
+
 
     return (
-    <>
-        <main className='savedMovies'>
-            <SearchForm />
-            <MoviesCardList
-                isSavedList={isSavedList}
-                isMoviesEmpty={isMoviesEmpty}
-                mapForPage={mapForPage}
-                hendlePopupOpen={hendlePopupOpen} />
-        </main>
-        <Footer />
-    </>
+        <>
+            <DeleteMoviesPopup
+                isPopupOpen={isDeleteMoviesPopupOpen}
+                hendlePopupClose={hendleDeleteMoviesPopupClose}
+                hendleDeleteMovies={hendleDelete}
+                isSavedList={true}
+            />
+            <TrailerPopup
+                isPopupOpen={isTrailerPopupOpen}
+                hendlePopupClose={hendleTrailerPopupClose}
+                selectedMovie={selectedMovie}
+                isSavedList={true}
+            />
+            <main className='savedMovies'>
+                <SearchForm
+                    hendleFindMovies={hendleFindMovies}
+                    isSavedList={true}
+                    map={mainSavedMap}
+                    getSavedMovies={getSavedMovies}
+                    hendleSetErrorInErrorRegPopup={hendleSetErrorInErrorRegPopup}
+                    hendleErrorRegPopupOpen={hendleErrorRegPopupOpen}
+                />
+                {isLoadingSavedMovies ?
+                    <MoviesCardList
+                        isSavedList={true}
+                        hendlePopupOpen={hendleDeleteMoviesPopupOpen}
+                        map={mainSavedMap}
+                        hendleSelectMovies={hendleSelectMovies}
+                        isMainMapLoading={isMainMapLoading}
+                        hendleTrailerPopupOpen={hendleTrailerPopupOpen}
+                        
+                    />
+                    : <Preloader />}
+            </main>
+            <Footer />
+        </>
     )
 }
+
 export default SavedMovies;

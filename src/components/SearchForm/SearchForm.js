@@ -1,19 +1,124 @@
 import './SearchForm.css';
 import find from '../../images/find.svg';
 import find_grey from '../../images/find_grey.svg';
-function SearchForm() {
+import { useEffect, useState } from 'react';
+
+function SearchForm({ hendleFindMovies, isSavedList, hendleSetErrorInErrorRegPopup,
+    hendleErrorRegPopupOpen }) {
+
+    const [formValue, setFormValue] = useState('')
+    const [formCheckbox, setFormCheckbox] = useState(false)
+    const [error, setErrors] = useState('')
+    const [isValidInput, setIsValidInputs] = useState(false)
+    const [isFormValid, setIsFormValid] = useState(false)
+
+    useEffect(() => {
+        if (isSavedList === false) {
+            const val = JSON.parse(localStorage.getItem('selectedMovie'))
+            setFormValue(val);
+            setIsValidInputs(false)
+
+            if (localStorage.getItem('selectedShortMovie') !== null) {
+                const short = JSON.parse(localStorage.getItem('selectedShortMovie'))
+                setFormCheckbox(short)
+            }
+        }
+      /*  else {
+            if (localStorage.getItem('selectedShortSavedMovie') !== null) {
+                const short = JSON.parse(localStorage.getItem('selectedShortSavedMovie'))
+                setFormCheckbox(short)
+            }
+        }*/
+    }, [])
+
+    const handleChange = (e) => {
+        const { value } = e.target;
+        if (value.length === 0 || value.length === undefined) {
+            setErrors("Заполните это поле");
+            setIsValidInputs(false)
+        }
+        else if (value.length < 2) {
+            setErrors("Название не может быть меньше 2-х символов");
+            setIsValidInputs(false)
+        }
+        else if (value.length > 100) {
+            setErrors("Название не может быть больше 100 символов");
+            setIsValidInputs(false)
+        }
+        else {
+            setErrors('')
+            setIsValidInputs(true)
+        }
+        setFormValue(value);
+    }
+
+    useEffect(() => {
+        if (isValidInput === true
+            && error === ''
+            && formValue !== '')
+            setIsFormValid(true)
+        else setIsFormValid(false)
+    }, [isValidInput, error, formValue])
+
+    const soldCheckbox = (e) => {
+        const { checked } = e.target
+        if (formValue === '' || formValue === null) {
+            hendleSetErrorInErrorRegPopup('Введите запрос в строку поиска')
+            hendleErrorRegPopupOpen()
+            setFormCheckbox(false)
+        }
+        else {
+            if (!isSavedList) {
+                if (localStorage.getItem('selectedShortMovie') !== null) {
+                    localStorage.removeItem('selectedShortMovie')
+                    localStorage.setItem('selectedShortMovie', JSON.stringify(checked))
+                }
+                else localStorage.setItem('selectedShortMovie', JSON.stringify(checked))
+            }
+            hendleFindMovies(formValue, !formCheckbox)
+            setFormCheckbox(checked)
+        }
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        hendleFindMovies(formValue, formCheckbox)
+    }
+
+    const searchFormInputError = isValidInput ? 'searchForm__form-input-error' :
+        'searchForm__form-input-error searchForm__form-input-error_active'
+
+    const buttonClassName = `searchForm__form-button  ${!isFormValid ? 'searchForm__form-button_inactive' : ''}`
+
     return (
         <section className='searchForm'>
-            <form className='searchForm__form'>
+            <form onSubmit={handleSubmit} className='searchForm__form' noValidate>
                 <div className='searchForm__block'>
                     <div className='searchForm__form-input-block'>
-                        <input className='searchForm__form-input' type='text' name='filmName' placeholder="Фильм" min='1' max='300' required autoComplete="off"/>
-                        <img className='searchForm__form-input-find' src={find_grey} alt='найти'/>
-                        <button className='searchForm__form-button' type="submit"><img src={find} alt='лупа'/></button>
+                        <div className='searchForm__form-input-error-block'>
+                            <input
+                                className='searchForm__form-input'
+                                type='text'
+                                name='movieName'
+                                value={formValue || ''}
+                                placeholder="Фильм"
+                                required
+                                autoComplete="off"
+                                onChange={handleChange} />
+                            <span className={searchFormInputError}>{error}</span>
+                        </div>
+                        <img className='searchForm__form-input-find' src={find_grey} alt='найти' />
+                        <button className={buttonClassName} type="submit" disabled={!isFormValid}><img src={find} alt='лупа' /></button>
                     </div>
                     <div className='searchForm__shortFilm-block'>
                         <label htmlFor='toddle' className='searchForm__lable'>
-                            <input id='toddle' className='searchForm__toggle-input' type='checkbox' name='isShortFilm' />
+                            <input
+                                id='toddle'
+                                className='searchForm__toggle-input'
+                                type='checkbox'
+                                name='isShortFilm'
+                                checked={formCheckbox || false}
+                                onChange={soldCheckbox} />
                             <span className='searchForm__slider'></span>
                         </label>
                         <p className='searchForm__shortFilm'>Kороткометражки</p>

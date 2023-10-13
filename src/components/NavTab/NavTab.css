@@ -26,6 +26,10 @@
     transition: opacity .5s ease;
 }
 
+.navtab__elem-value_white {
+    color: #ffffff;
+}
+
 .navtab__elem-value:hover {
     font-weight: medium;
     opacity: 0.6;

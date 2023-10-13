@@ -41,9 +41,13 @@
 }
 
 .moviesCardList__button-none {
-    display: none;
+    opacity: 0;
+    cursor: auto;
 }
 
+.moviesCardList__button-none:hover {
+    opacity: 0;
+}
 
 @media screen and (min-width: 768px) {
     .moviesCardList {

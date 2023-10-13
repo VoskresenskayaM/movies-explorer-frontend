@@ -14,6 +14,10 @@
     background-color: #000;
 }
 
+.burger__line_white {
+    background-color: #ffffff;
+}
+
 @media screen and (min-width: 768px) {
     .burger {
         width: 44px;
@@ -32,6 +36,5 @@
         width: 28px;
         height: 3px;
         margin-top: 7px;
-        background-color: #000;
     }
 }
